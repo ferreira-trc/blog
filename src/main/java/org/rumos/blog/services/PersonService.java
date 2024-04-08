@@ -1,6 +1,7 @@
 package org.rumos.blog.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.rumos.blog.model.Person;
 import org.rumos.blog.repositories.PersonRepository;
@@ -19,6 +20,11 @@ public class PersonService {
 
     public List<Person> findAll() {
         return personRepository.findAll();
+    }
+
+    public Person findById(Long id) {
+        Optional<Person> person = personRepository.findById(id);
+        return person.get();
     }
 
 }
