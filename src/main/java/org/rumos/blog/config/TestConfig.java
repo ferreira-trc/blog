@@ -7,7 +7,11 @@ import org.rumos.blog.model.Person;
 import org.rumos.blog.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
+@Configuration
+@Profile("test")
 public class TestConfig implements CommandLineRunner{
 
     @Autowired
