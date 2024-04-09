@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,14 +21,18 @@ public class User implements Serializable{
     private String password;
     private String role;
 
+    @OneToOne
+    private Person person;
+
     public User() {
     }
 
-    public User(Long id, String userName, String password, String role) {
+    public User(Long id, String userName, String password, String role, Person person) {
         this.id = id;
         this.userName = userName;
         this.password = password;
         this.role = role;
+        this.person = person;
     }
 
     public static long getSerialversionuid() {
@@ -66,6 +71,15 @@ public class User implements Serializable{
         this.role = role;
     }
 
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    
     
 
     
