@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll(@PathVariable Long id) {
+    public ResponseEntity<List<User>> findAll() {
         List<User> list = userService.findAll();
         return ResponseEntity.ok().body(list);
     }
