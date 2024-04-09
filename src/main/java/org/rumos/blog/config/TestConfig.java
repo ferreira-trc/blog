@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.Arrays;
 
 import org.rumos.blog.model.Person;
+import org.rumos.blog.model.User;
 import org.rumos.blog.repositories.PersonRepository;
+import org.rumos.blog.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +19,9 @@ public class TestConfig implements CommandLineRunner{
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -24,6 +29,11 @@ public class TestConfig implements CommandLineRunner{
         Person person2 = new Person(null, "Rute Andrade", LocalDate.now());
 
         personRepository.saveAll(Arrays.asList(person1,person2));
+
+        User user1 = new User(null, "@ferreira_trc", "1234", "admin");
+        User user2 = new User(null, "@andrade_rm", "1234", "admin");
+
+        userRepository.saveAll(Arrays.asList(user1,user2));
     }
 
 
