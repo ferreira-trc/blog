@@ -34,8 +34,6 @@ public class PersonController {
     public ResponseEntity<Person> getMethodName(@PathVariable Long id) {
         Person person = personService.findById(id);
         return ResponseEntity.ok().body(person);
-    }
-
-    
+    }    
     
 }
