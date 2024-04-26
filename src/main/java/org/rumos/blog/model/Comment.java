@@ -17,8 +17,7 @@ public class Comment implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String title;
+    private Long id;    
     @Column(length = 1000)
     private String text;
     private LocalDate dateOfPublication;
@@ -26,9 +25,8 @@ public class Comment implements Serializable{
     public Comment() {
     }
 
-    public Comment(Long id, String title, String text, LocalDate dateOfPublication) {
-        this.id = id;
-        this.title = title;
+    public Comment(Long id, String text, LocalDate dateOfPublication) {
+        this.id = id;        
         this.text = text;
         this.dateOfPublication = dateOfPublication;
     }
@@ -43,15 +41,7 @@ public class Comment implements Serializable{
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    }    
 
     public String getText() {
         return text;
