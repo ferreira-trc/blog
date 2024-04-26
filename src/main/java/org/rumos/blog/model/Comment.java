@@ -29,10 +29,11 @@ public class Comment implements Serializable{
     public Comment() {
     }
 
-    public Comment(Long id, String text, LocalDate dateOfPublication) {
+    public Comment(Long id, String text, LocalDate dateOfPublication, User author) {
         this.id = id;        
         this.text = text;
         this.dateOfPublication = dateOfPublication;
+        this.author = author;
     }
 
     public static long getSerialversionuid() {

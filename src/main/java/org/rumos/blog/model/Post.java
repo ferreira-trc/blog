@@ -31,12 +31,13 @@ public class Post implements Serializable{
     public Post() {
     }
 
-    public Post(Long id, String title, String text, LocalDate dateOfPublication, String category) {
+    public Post(Long id, String title, String text, LocalDate dateOfPublication, String category, User author) {
         this.id = id;
         this.title = title;
         this.text = text;
         this.dateOfPublication = dateOfPublication;
         this.category = category;
+        this.author = author;
     }
 
     public static long getSerialversionuid() {
