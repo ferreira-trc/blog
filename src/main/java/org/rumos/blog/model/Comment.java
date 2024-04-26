@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,6 +22,9 @@ public class Comment implements Serializable{
     @Column(length = 1000)
     private String text;
     private LocalDate dateOfPublication;
+
+    @OneToOne
+    private User author;
 
     public Comment() {
     }
@@ -57,6 +61,16 @@ public class Comment implements Serializable{
 
     public void setDateOfPublication(LocalDate dateOfPublication) {
         this.dateOfPublication = dateOfPublication;
-    }    
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+    
+    
 
 }
