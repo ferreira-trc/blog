@@ -1,15 +1,16 @@
 package org.rumos.blog.config;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 
+import org.rumos.blog.model.Comment;
 import org.rumos.blog.model.Person;
 import org.rumos.blog.model.Post;
 import org.rumos.blog.model.User;
+import org.rumos.blog.repositories.CommentRepository;
 import org.rumos.blog.repositories.PersonRepository;
 import org.rumos.blog.repositories.PostRepository;
 import org.rumos.blog.repositories.UserRepository;
@@ -30,6 +31,9 @@ public class TestConfig implements CommandLineRunner{
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -52,6 +56,10 @@ public class TestConfig implements CommandLineRunner{
 
         postRepository.saveAll(Arrays.asList(post1,post2));
 
+        Comment comment1 = new Comment(null, "Gosto deste poema",LocalDate.now());
+        Comment comment2 = new Comment(null, "Adoro deste poema",LocalDate.now());
+
+        commentRepository.saveAll(Arrays.asList(comment1, comment2));
         
     }
 
