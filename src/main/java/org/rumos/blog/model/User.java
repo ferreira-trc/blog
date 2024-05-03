@@ -30,6 +30,9 @@ public class User implements Serializable{
     @OneToMany
     private Set<Post> posts = new HashSet<>();
 
+    @OneToMany
+    private Set<Comment> comments = new HashSet<>();
+
     public User() {
     }
 
