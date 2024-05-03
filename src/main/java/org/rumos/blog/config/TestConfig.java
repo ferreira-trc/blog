@@ -54,10 +54,13 @@ public class TestConfig implements CommandLineRunner{
         Post post1 = postBuilder(path1);
         Post post2 = postBuilder(path2);
 
+        post1.setAuthor(user1);
+        post2.setAuthor(user1);
+
         postRepository.saveAll(Arrays.asList(post1,post2));
 
-        Comment comment1 = new Comment(null, "Gosto deste poema",LocalDate.now());
-        Comment comment2 = new Comment(null, "Adoro deste poema",LocalDate.now());
+        Comment comment1 = new Comment(null, "Gosto deste poema",LocalDate.now(), user1);
+        Comment comment2 = new Comment(null, "Adoro deste poema",LocalDate.now(), user2);
 
         commentRepository.saveAll(Arrays.asList(comment1, comment2));
         

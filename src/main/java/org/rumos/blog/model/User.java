@@ -1,11 +1,14 @@
 package org.rumos.blog.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -24,6 +27,9 @@ public class User implements Serializable{
     @OneToOne
     private Person person;
 
+    @OneToMany
+    private Set<Post> posts = new HashSet<>();
+
     public User() {
     }
 
@@ -33,6 +39,15 @@ public class User implements Serializable{
         this.password = password;
         this.role = role;
         this.person = person;
+    }
+
+    public User(Long id, String userName, String password, String role, Person person, Set<Post> posts) {
+        this.id = id;
+        this.userName = userName;
+        this.password = password;
+        this.role = role;
+        this.person = person;
+        this.posts = posts;
     }
 
     public static long getSerialversionuid() {
@@ -79,8 +94,12 @@ public class User implements Serializable{
         this.person = person;
     }
 
-    
-    
+    public Set<Post> getPosts() {
+        return posts;
+    }
 
-    
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
+    }
+
 }
