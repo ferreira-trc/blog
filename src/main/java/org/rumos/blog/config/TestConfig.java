@@ -59,8 +59,8 @@ public class TestConfig implements CommandLineRunner{
 
         postRepository.saveAll(Arrays.asList(post1,post2));
 
-        Comment comment1 = new Comment(null, "Gosto deste poema",LocalDate.now(), user1);
-        Comment comment2 = new Comment(null, "Adoro deste poema",LocalDate.now(), user2);
+        Comment comment1 = new Comment(null, "Gosto deste poema",LocalDate.now(), user1, post1);
+        Comment comment2 = new Comment(null, "Adoro deste poema",LocalDate.now(), user2, post1);
 
         commentRepository.saveAll(Arrays.asList(comment1, comment2));
         

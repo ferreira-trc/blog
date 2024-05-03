@@ -24,20 +24,32 @@ public class Comment implements Serializable{
     private LocalDate dateOfPublication;
 
     @ManyToOne
+    private Post post;
+
+    @ManyToOne
     private User author;
 
     public Comment() {
     }
 
-    public Comment(Long id, String text, LocalDate dateOfPublication, User author) {
+    public Comment(Long id, String text, LocalDate dateOfPublication, User author, Post post) {
         this.id = id;        
         this.text = text;
         this.dateOfPublication = dateOfPublication;
         this.author = author;
+        this.post = post;
     }
 
     public static long getSerialversionuid() {
         return serialVersionUID;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     public Long getId() {

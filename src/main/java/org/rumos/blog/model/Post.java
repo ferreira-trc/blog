@@ -2,6 +2,8 @@ package org.rumos.blog.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -28,6 +30,9 @@ public class Post implements Serializable{
 
     @ManyToOne
     private User author;
+
+    @OneToMany
+    private Set<Comment> comments = new HashSet<>();
 
     public Post() {
     }
@@ -99,6 +104,14 @@ public class Post implements Serializable{
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
     
     
