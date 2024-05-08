@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,17 +22,22 @@ public class User implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
+
+    @Column(name = "username", nullable = false, unique = true)    
     private String userName;
     private String password;
     private String role;
 
     @OneToOne
     private Person person;
-
-    @OneToMany
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "author")
     private Set<Post> posts = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany
     private Set<Comment> comments = new HashSet<>();
 

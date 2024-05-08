@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +22,7 @@ public class Post implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private Long id;
     private String title;
     @Column(length = 1000)
@@ -28,10 +30,11 @@ public class Post implements Serializable{
     private LocalDate dateOfPublication;
     private String category;
 
-    @ManyToOne
+    
+    @ManyToOne()
     private User author;
-
-    @OneToMany
+    
+    @OneToMany(mappedBy = "post")
     private Set<Comment> comments = new HashSet<>();
 
     public Post() {
