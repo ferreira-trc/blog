@@ -26,4 +26,8 @@ public class PostService {
         Optional<Post> post = postRepository.findById(id);
         return post.get();
     }
+
+    public Post add(Post post) {        
+        return postRepository.save(post);
+    }
 }
