@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -47,5 +48,12 @@ public class PostController {
                     .buildAndExpand(post.getId()).toUri();        
         return ResponseEntity.created(uri).body(post);
     }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Post> update(@PathVariable Long id, @RequestBody Post post) {
+        post = postService.update(id, post);        
+        return ResponseEntity.ok().body(post);
+    }
+
     
 }

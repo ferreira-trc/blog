@@ -30,4 +30,17 @@ public class PostService {
     public Post add(Post post) {        
         return postRepository.save(post);
     }
+    /*
+     * need more logic.
+     * if the category change the comments while be deleted
+     */
+    public Post update(Long postId, Post postUpdated) {
+        Post postToUpdate = postRepository.getReferenceById(postId);
+        postToUpdate.setTitle(postUpdated.getTitle());
+        postToUpdate.setText(postUpdated.getText());
+        postToUpdate.setCategory(postUpdated.getCategory());
+
+        return postRepository.save(postToUpdate);
+
+    }
 }
