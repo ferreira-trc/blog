@@ -31,7 +31,7 @@ public class Post implements Serializable{
     private String category;
 
     
-    @ManyToOne()
+    @ManyToOne
     private User author;
     
     @OneToMany(mappedBy = "post", cascade = {CascadeType.REMOVE})

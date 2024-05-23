@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,15 +31,15 @@ public class User implements Serializable{
     private String password;
     private String role;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.REMOVE})
     private Person person;
     
     @JsonIgnore
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.REMOVE})
     private Set<Post> posts = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.REMOVE})
     private Set<Comment> comments = new HashSet<>();
 
     public User() {
