@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -49,6 +51,12 @@ public class UserController {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                     .buildAndExpand(user.getId()).toUri();        
         return ResponseEntity.created(uri).body(user);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<User> put(@PathVariable Long id, @RequestBody User user) {
+        user = userService.update(id, user);        
+        return ResponseEntity.ok().body(user);
     }
     
     @DeleteMapping(value = "/{id}")
