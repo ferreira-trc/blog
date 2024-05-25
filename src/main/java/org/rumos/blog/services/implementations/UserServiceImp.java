@@ -1,24 +1,20 @@
-package org.rumos.blog.services;
+package org.rumos.blog.services.implementations;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.rumos.blog.model.Post;
 import org.rumos.blog.model.User;
 import org.rumos.blog.repositories.UserRepository;
+import org.rumos.blog.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
-
-    private UserRepository userRepository;
+public class UserServiceImp implements UserService{
 
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
+    private UserRepository userRepository;
+   
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -32,7 +28,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-     public User update(Long postId, User userUpdated) {
+    public User update(Long postId, User userUpdated) {
         User postToUpdate = userRepository.getReferenceById(postId);
         updateDate(postToUpdate, userUpdated);
         return userRepository.save(postToUpdate);

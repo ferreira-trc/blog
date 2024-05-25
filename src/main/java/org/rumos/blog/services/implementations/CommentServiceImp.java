@@ -1,4 +1,4 @@
-package org.rumos.blog.services;
+package org.rumos.blog.services.implementations;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,14 +7,15 @@ import org.rumos.blog.model.Comment;
 import org.rumos.blog.model.Post;
 import org.rumos.blog.repositories.CommentRepository;
 import org.rumos.blog.repositories.PostRepository;
+import org.rumos.blog.services.interfaces.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
+
 
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class CommentService {
+public class CommentServiceImp implements CommentService{
 
     @Autowired
     private CommentRepository commentRepository;
@@ -50,7 +51,7 @@ public class CommentService {
         commentToUpdate.setText(commentUpdated.getText());
     }
 
-    public void delete(@PathVariable Long id) {
+    public void delete(Long id) {
         commentRepository.deleteById(id);        
     }
     

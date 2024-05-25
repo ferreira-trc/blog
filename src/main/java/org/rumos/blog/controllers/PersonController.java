@@ -4,8 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.rumos.blog.model.Person;
-import org.rumos.blog.model.User;
-import org.rumos.blog.services.PersonService;
+import org.rumos.blog.services.interfaces.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping(value = "/person")
 public class PersonController {
 
-    private PersonService personService;
-
     @Autowired
-    public PersonController(PersonService personService) {
-        this.personService = personService;
-    }
+    private PersonService personService;    
 
     @GetMapping    
     public ResponseEntity<List<Person>> findAll() {

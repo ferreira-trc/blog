@@ -1,23 +1,20 @@
-package org.rumos.blog.services;
+package org.rumos.blog.services.implementations;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.rumos.blog.model.Post;
 import org.rumos.blog.repositories.PostRepository;
+import org.rumos.blog.services.interfaces.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PostService {
-
-    private PostRepository postRepository;
+public class PostServiceImp implements PostService{
 
     @Autowired
-    public PostService(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
-
+    private PostRepository postRepository;
+        
     public List<Post> findAll() {
         return postRepository.findAll();
     }

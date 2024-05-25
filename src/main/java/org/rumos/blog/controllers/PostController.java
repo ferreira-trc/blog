@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.rumos.blog.model.Post;
-import org.rumos.blog.services.PostService;
+import org.rumos.blog.services.interfaces.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,12 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping(value = "/post")
 public class PostController {
 
-    private PostService postService;
-
     @Autowired
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
+    private PostService postService;    
 
     @GetMapping    
     public ResponseEntity<List<Post>> findAll() {
