@@ -1,9 +1,7 @@
 package org.rumos.blog.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
