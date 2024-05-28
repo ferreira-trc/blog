@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,16 +27,17 @@ public class PostController {
     private PostService postService;    
 
     @GetMapping    
-    public ResponseEntity<List<Post>> getAll() {
-        List<Post> list = postService.findAll();
-        return ResponseEntity.ok().body(list);
-    }
+    public ResponseEntity<List<Post>> getAll(@RequestParam(required = false) String order) {
+        List<Post> list;
 
-    @GetMapping(value = "/cronOrder")    
-    public ResponseEntity<List<Post>> getAllByCronOrder() {
-        List<Post> list = postService.findAllByCronOrder();
+        if (order.equals("cron")) {
+            list = postService.findAllByCronOrder();
+        } else { 
+            list = postService.findAll();
+        }
+         
         return ResponseEntity.ok().body(list);
-    }
+    }   
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Post> getById(@PathVariable Long id) {
