@@ -5,7 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.rumos.blog.model.Comment;
 import org.rumos.blog.model.Person;
@@ -40,37 +42,59 @@ public class TestConfig implements CommandLineRunner{
     @Override
     public void run(String... args) throws Exception {
 
-        Person person1 = new Person(null, "Tiago Ferreira", LocalDate.now());
-        Person person2 = new Person(null, "Rute Andrade", LocalDate.now());
+        Person person1 = new Person(1L, "Tiago Ferreira", LocalDate.now());
+        Person person2 = new Person(2L, "Rute Andrade", LocalDate.now());
 
         personRepository.saveAll(Arrays.asList(person1,person2));
 
-        User user1 = new User(null, "tiago@ex.com","@ferreira_trc", "1234", Role.ADMIN, person1);
-        User user2 = new User(null,"rute@ex.com","@andrade_rm", "1234", Role.ADMIN, person2);
+        User user1 = new User(1L, "tiago@ex.com","@ferreira_trc", "1234", Role.ADMIN, person1);
+        User user2 = new User(2L,"rute@ex.com","@andrade_rm", "1234", Role.ADMIN, person2);
 
         userRepository.saveAll(Arrays.asList(user1,user2));
 
         String path1 = "Mar Portugues.txt";
         String path2 = "O Infante.txt";
 
-        Post post1 = postBuilder(path1);
-        Post post2 = postBuilder(path2);
+        Post post1 = postPoemOfFPBuilder(path1);
+        Post post2 = postPoemOfFPBuilder(path2);
 
         post1.setAuthor(user1);
         post2.setAuthor(user2);
 
-        postRepository.saveAll(Arrays.asList(post1,post2));
+        postRepository.saveAll(postBuilder(100, Arrays.asList(user1,user2)));
 
-        Comment comment1 = new Comment(null, "Gosto deste poema",LocalDateTime.now(), user1, post1);
-        Comment comment2 = new Comment(null, "Adoro deste poema",LocalDateTime.now(), user2, post1);
-        Comment comment3 = new Comment(null, "Adoro FP", LocalDateTime.now(), user2, post2);
-        Comment comment4 = new Comment(null, "Viva ao quinto imperio", LocalDateTime.now(), user1, post2);
+        Comment comment1 = new Comment(1L, "Gosto deste poema",LocalDateTime.now(), user1, post1);
+        Comment comment2 = new Comment(2L, "Adoro deste poema",LocalDateTime.now(), user2, post1);
+        Comment comment3 = new Comment(3L, "Adoro FP", LocalDateTime.now(), user2, post2);
+        Comment comment4 = new Comment(4L, "Viva ao quinto imperio", LocalDateTime.now(), user1, post2);
 
-        commentRepository.saveAll(Arrays.asList(comment1, comment2, comment3, comment4));
+        //commentRepository.saveAll(Arrays.asList(comment1, comment2, comment3, comment4));
         
     }
 
-    public Post postBuilder (String path) throws IOException {
+    public List<Post> postBuilder(int numberOfPost, List<User> useres) {
+        List<Post> list = new ArrayList<>();
+        LocalDateTime dateOfPublication = LocalDateTime.of(2024, 1, 1, 9, 0);
+        String title = "title Post_";
+        String body = "body Post_";        
+
+        for (int i = 0; i < numberOfPost; i++) {
+            int userIndex = i % useres.size(); 
+            long id = numberOfPost -i;
+            list.add(new Post(id, title + i, body + i, dateOfPublication, "", useres.get(userIndex)));
+            
+            if (i % 2 == 0) {
+                dateOfPublication = dateOfPublication.plusDays(-i);
+            } else {
+                dateOfPublication = dateOfPublication.plusDays(i);
+            }
+            
+        }
+
+        return list;
+    }
+
+    public Post postPoemOfFPBuilder (String path) throws IOException {
         BufferedReader buffRead = new BufferedReader(new FileReader(path));
         StringBuilder text = new StringBuilder();
         String title = "";

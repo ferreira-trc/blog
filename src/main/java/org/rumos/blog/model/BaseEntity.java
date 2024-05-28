@@ -17,7 +17,7 @@ import jakarta.persistence.MappedSuperclass;
 public abstract class BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "id")
     private Long id;
@@ -34,10 +34,15 @@ public abstract class BaseEntity {
     private Timestamp modifiedAt;
     
     public BaseEntity() {
-    }    
+    }     
 
     public BaseEntity(Long id) {
-        this.id = id;        
+        this.id = id;
+    }
+
+    public BaseEntity(Long id, Timestamp createdAt) {
+        this(id);
+        this.createdAt = createdAt;       
     }
 
     public Long getId() {

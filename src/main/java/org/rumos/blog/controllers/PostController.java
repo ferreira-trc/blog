@@ -26,13 +26,19 @@ public class PostController {
     private PostService postService;    
 
     @GetMapping    
-    public ResponseEntity<List<Post>> findAll() {
+    public ResponseEntity<List<Post>> getAll() {
         List<Post> list = postService.findAll();
         return ResponseEntity.ok().body(list);
     }
 
+    @GetMapping(value = "/cronOrder")    
+    public ResponseEntity<List<Post>> getAllByCronOrder() {
+        List<Post> list = postService.findAllByCronOrder();
+        return ResponseEntity.ok().body(list);
+    }
+
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Post> getMethodName(@PathVariable Long id) {
+    public ResponseEntity<Post> getById(@PathVariable Long id) {
         Post post = postService.findById(id);
         return ResponseEntity.ok().body(post);
     }

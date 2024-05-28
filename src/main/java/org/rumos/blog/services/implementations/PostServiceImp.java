@@ -1,5 +1,6 @@
 package org.rumos.blog.services.implementations;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,13 @@ public class PostServiceImp implements PostService{
     public Post findById(Long id) {
         Optional<Post> post = postRepository.findById(id);
         return post.get();
+    }
+
+    public List<Post> findAllByCronOrder() {
+        List<Post> list = postRepository.findAll();
+        Comparator<Post> comparatorPostByPublicationDate = (post1, post2) -> post1.compareTo(post2); 
+        list.sort(comparatorPostByPublicationDate);
+        return list;
     }
 
     public Post add(Post post) {        

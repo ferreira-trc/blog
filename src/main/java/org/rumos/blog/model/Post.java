@@ -1,6 +1,7 @@
 package org.rumos.blog.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +15,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name= "posts")
-public class Post extends BaseEntity implements Serializable{
+public class Post extends BaseEntity implements Serializable, Comparable<Post>{
     private static final long serialVersionUID = 1L;
         
     private String title;
@@ -32,7 +33,7 @@ public class Post extends BaseEntity implements Serializable{
     }
 
     public Post(Long id, String title, String text, LocalDateTime dateOfPublication, String category) {
-        super(id);        
+        super(id, Timestamp.valueOf(dateOfPublication));        
         this.title = title;
         this.text = text;        
         this.category = category;
@@ -86,6 +87,66 @@ public class Post extends BaseEntity implements Serializable{
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
+
+    @Override
+    public String toString() {
+        return "Post [title=" + title + ", text=" + text + ", category=" + category + ", author=" + author + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        result = prime * result + ((text == null) ? 0 : text.hashCode());
+        result = prime * result + ((category == null) ? 0 : category.hashCode());
+        result = prime * result + ((author == null) ? 0 : author.hashCode());
+        result = prime * result + ((comments == null) ? 0 : comments.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Post other = (Post) obj;
+        if (title == null) {
+            if (other.title != null)
+                return false;
+        } else if (!title.equals(other.title))
+            return false;
+        if (text == null) {
+            if (other.text != null)
+                return false;
+        } else if (!text.equals(other.text))
+            return false;
+        if (category == null) {
+            if (other.category != null)
+                return false;
+        } else if (!category.equals(other.category))
+            return false;
+        if (author == null) {
+            if (other.author != null)
+                return false;
+        } else if (!author.equals(other.author))
+            return false;
+        if (comments == null) {
+            if (other.comments != null)
+                return false;
+        } else if (!comments.equals(other.comments))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int compareTo(Post post) {       
+        return getCreatedAt().compareTo(post.getCreatedAt());           
+    }
+    
     
     
     
