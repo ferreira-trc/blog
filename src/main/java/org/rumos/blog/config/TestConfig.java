@@ -11,6 +11,7 @@ import org.rumos.blog.model.Comment;
 import org.rumos.blog.model.Person;
 import org.rumos.blog.model.Post;
 import org.rumos.blog.model.User;
+import org.rumos.blog.model.enums.Role;
 import org.rumos.blog.repositories.CommentRepository;
 import org.rumos.blog.repositories.PersonRepository;
 import org.rumos.blog.repositories.PostRepository;
@@ -44,8 +45,8 @@ public class TestConfig implements CommandLineRunner{
 
         personRepository.saveAll(Arrays.asList(person1,person2));
 
-        User user1 = new User(null, "@ferreira_trc", "1234", "admin", person1);
-        User user2 = new User(null, "@andrade_rm", "1234", "admin", person2);
+        User user1 = new User(null, "tiago@ex.com","@ferreira_trc", "1234", Role.ADMIN, person1);
+        User user2 = new User(null,"rute@ex.com","@andrade_rm", "1234", Role.ADMIN, person2);
 
         userRepository.saveAll(Arrays.asList(user1,user2));
 
