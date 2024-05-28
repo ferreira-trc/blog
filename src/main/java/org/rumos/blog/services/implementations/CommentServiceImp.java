@@ -3,8 +3,8 @@ package org.rumos.blog.services.implementations;
 import java.util.List;
 import java.util.Optional;
 
-import org.rumos.blog.model.Comment;
-import org.rumos.blog.model.Post;
+import org.rumos.blog.model.entities.Comment;
+import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.repositories.CommentRepository;
 import org.rumos.blog.repositories.PostRepository;
 import org.rumos.blog.services.interfaces.CommentService;

@@ -3,7 +3,7 @@ package org.rumos.blog.controllers;
 import java.net.URI;
 import java.util.List;
 
-import org.rumos.blog.model.Post;
+import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.services.interfaces.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

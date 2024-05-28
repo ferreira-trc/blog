@@ -2,7 +2,7 @@ package org.rumos.blog.services.interfaces;
 
 import java.util.List;
 
-import org.rumos.blog.model.Person;
+import org.rumos.blog.model.entities.Person;
 
 public interface PersonService {
     public List<Person> findAll();

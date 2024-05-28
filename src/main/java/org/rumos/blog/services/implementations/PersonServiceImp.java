@@ -3,7 +3,7 @@ package org.rumos.blog.services.implementations;
 import java.util.List;
 import java.util.Optional;
 
-import org.rumos.blog.model.Person;
+import org.rumos.blog.model.entities.Person;
 import org.rumos.blog.repositories.PersonRepository;
 import org.rumos.blog.services.interfaces.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;

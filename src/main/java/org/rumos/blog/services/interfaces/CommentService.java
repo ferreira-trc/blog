@@ -2,7 +2,7 @@ package org.rumos.blog.services.interfaces;
 
 import java.util.List;
 
-import org.rumos.blog.model.Comment;
+import org.rumos.blog.model.entities.Comment;
 
 public interface CommentService {
 

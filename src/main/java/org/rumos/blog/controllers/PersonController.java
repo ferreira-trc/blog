@@ -3,7 +3,7 @@ package org.rumos.blog.controllers;
 import java.net.URI;
 import java.util.List;
 
-import org.rumos.blog.model.Person;
+import org.rumos.blog.model.entities.Person;
 import org.rumos.blog.services.interfaces.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

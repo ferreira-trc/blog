@@ -3,7 +3,7 @@ package org.rumos.blog.services.implementations;
 import java.util.List;
 import java.util.Optional;
 
-import org.rumos.blog.model.User;
+import org.rumos.blog.model.entities.User;
 import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

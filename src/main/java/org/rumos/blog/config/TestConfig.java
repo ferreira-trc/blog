@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.rumos.blog.model.Comment;
-import org.rumos.blog.model.Person;
-import org.rumos.blog.model.Post;
-import org.rumos.blog.model.User;
+import org.rumos.blog.model.entities.Comment;
+import org.rumos.blog.model.entities.Person;
+import org.rumos.blog.model.entities.Post;
+import org.rumos.blog.model.entities.User;
 import org.rumos.blog.model.enums.Role;
 import org.rumos.blog.repositories.CommentRepository;
 import org.rumos.blog.repositories.PersonRepository;

@@ -1,4 +1,4 @@
-package org.rumos.blog.model;
+package org.rumos.blog.model.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

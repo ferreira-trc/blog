@@ -2,7 +2,7 @@ package org.rumos.blog.services.interfaces;
 
 import java.util.List;
 
-import org.rumos.blog.model.Post;
+import org.rumos.blog.model.entities.Post;
 
 public interface PostService {
     public List<Post> findAll();
