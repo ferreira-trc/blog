@@ -4,12 +4,16 @@ import org.rumos.blog.model.entities.Post;
 
 public class PostMapDTO {
 
-    public static Post convertoToClass() {
+    public static Post convertoToClass(PostPostDTO postDTO) {
         Post post = new Post();
+        post.setTitle(postDTO.title());
+        post.setText(postDTO.text());
+        post.setCategory(postDTO.category());
+
         return post;
     }
 
-    public static PostGetDTO convertoToGetDTO(Post post) {
+    public static PostGetDTO convertToGetDTO(Post post) {
         PostGetDTO postGetDTO = new PostGetDTO();
         postGetDTO.setId(post.getId());
         postGetDTO.setTitle(post.getTitle());
@@ -19,4 +23,6 @@ public class PostMapDTO {
 
         return postGetDTO;
     }
+
+    
 }
