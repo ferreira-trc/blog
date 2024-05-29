@@ -32,7 +32,13 @@ public class PostServiceImp implements PostService{
 
     public PostGetDTO findById(Long id) {
         Optional<Post> post = postRepository.findById(id);
-        return post.get();
+
+        if (post.isEmpty()) {
+            return null;
+        }
+        
+        PostGetDTO postGetDTO = PostMapDTO.convertoToGetDTO(post.get());
+        return postGetDTO;
     }
 
     public List<PostGetDTO> findAllByCronOrder() {
