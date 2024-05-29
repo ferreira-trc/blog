@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.rumos.blog.model.dtos.maps.PostMapDTO;
 import org.rumos.blog.model.dtos.post.PostGetDTO;
-import org.rumos.blog.model.dtos.post.PostMapDTO;
 import org.rumos.blog.model.dtos.post.PostPostDTO;
 import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.model.entities.User;
@@ -58,7 +58,7 @@ public class PostServiceImp implements PostService{
 
     public PostGetDTO add(PostPostDTO postDTO) {
         User author = userRepository.findByUserName(postDTO.authorUserName());
-        Post postToSave = PostMapDTO.convertoToClass(postDTO);
+        Post postToSave = PostMapDTO.convertToClass(postDTO);
         postToSave.setAuthor(author);
 
         Post postoToReturn = postRepository.save(postToSave);        
