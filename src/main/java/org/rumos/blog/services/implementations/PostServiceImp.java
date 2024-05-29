@@ -36,7 +36,7 @@ public class PostServiceImp implements PostService{
         if (post.isEmpty()) {
             return null;
         }
-        
+
         PostGetDTO postGetDTO = PostMapDTO.convertoToGetDTO(post.get());
         return postGetDTO;
     }
@@ -45,7 +45,13 @@ public class PostServiceImp implements PostService{
         List<Post> list = postRepository.findAll();
         Comparator<Post> comparatorPostByPublicationDate = (post1, post2) -> post1.compareTo(post2); 
         list.sort(comparatorPostByPublicationDate);
-        return list;
+
+        List<PostGetDTO> listOfDTOs = new ArrayList<>();
+
+        for (Post post : list) {
+            listOfDTOs.add(PostMapDTO.convertoToGetDTO(post));
+        }
+        return listOfDTOs;
     }
 
     public Post add(Post post) {        
