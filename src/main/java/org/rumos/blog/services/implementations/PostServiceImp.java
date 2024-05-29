@@ -7,8 +7,11 @@ import java.util.Optional;
 
 import org.rumos.blog.model.dtos.post.PostGetDTO;
 import org.rumos.blog.model.dtos.post.PostMapDTO;
+import org.rumos.blog.model.dtos.post.PostPostDTO;
 import org.rumos.blog.model.entities.Post;
+import org.rumos.blog.model.entities.User;
 import org.rumos.blog.repositories.PostRepository;
+import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +21,16 @@ public class PostServiceImp implements PostService{
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private UserRepository userRepository;
         
     public List<PostGetDTO> findAll() {
         List<Post> list = postRepository.findAll();
         List<PostGetDTO> listOfDTOs = new ArrayList<>();
 
         for (Post post : list) {
-            listOfDTOs.add(PostMapDTO.convertoToGetDTO(post));
+            listOfDTOs.add(PostMapDTO.convertToGetDTO(post));
         }
 
         return listOfDTOs;
@@ -37,7 +43,7 @@ public class PostServiceImp implements PostService{
             return null;
         }
 
-        PostGetDTO postGetDTO = PostMapDTO.convertoToGetDTO(post.get());
+        PostGetDTO postGetDTO = PostMapDTO.convertToGetDTO(post.get());
         return postGetDTO;
     }
 
@@ -49,13 +55,19 @@ public class PostServiceImp implements PostService{
         List<PostGetDTO> listOfDTOs = new ArrayList<>();
 
         for (Post post : list) {
-            listOfDTOs.add(PostMapDTO.convertoToGetDTO(post));
+            listOfDTOs.add(PostMapDTO.convertToGetDTO(post));
         }
         return listOfDTOs;
     }
 
-    public Post add(Post post) {        
-        return postRepository.save(post);
+    public PostGetDTO add(PostPostDTO postDTO) {
+        User author = userRepository.findByUserName(postDTO.authorUserName());
+        Post postToSave = PostMapDTO.convertoToClass(postDTO);
+        postToSave.setAuthor(author);
+
+        Post postoToReturn = postRepository.save(postToSave);        
+
+        return PostMapDTO.convertToGetDTO(postoToReturn);
     }
     
     public Post update(Long postId, Post postUpdated) {

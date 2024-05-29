@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.rumos.blog.model.dtos.post.PostGetDTO;
+import org.rumos.blog.model.dtos.post.PostPostDTO;
 import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.services.interfaces.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,8 @@ public class PostController {
     }
  
     @PostMapping
-    public ResponseEntity<Post> post(@RequestBody Post post) {
-        post = postService.add(post);
+    public ResponseEntity<PostGetDTO> post(@RequestBody PostPostDTO postDTO) {
+        PostGetDTO post = postService.add(postDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                     .buildAndExpand(post.getId()).toUri();        
         return ResponseEntity.created(uri).body(post);
