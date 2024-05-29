@@ -38,12 +38,7 @@ public abstract class BaseEntity {
 
     public BaseEntity(Long id) {
         this.id = id;
-    }
-
-    public BaseEntity(Long id, Timestamp createdAt) {
-        this(id);
-        this.createdAt = createdAt;       
-    }
+    }    
 
     public Long getId() {
         return id;

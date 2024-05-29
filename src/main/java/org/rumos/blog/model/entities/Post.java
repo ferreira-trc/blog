@@ -32,15 +32,15 @@ public class Post extends BaseEntity implements Serializable, Comparable<Post>{
     public Post() {
     }
 
-    public Post(Long id, String title, String text, LocalDateTime dateOfPublication, String category) {
-        super(id, Timestamp.valueOf(dateOfPublication));        
+    public Post(Long id, String title, String text, String category) {
+        super(id);        
         this.title = title;
         this.text = text;        
         this.category = category;
     }
 
-    public Post(Long id, String title, String text, LocalDateTime dateOfPublication, String category, User author) {
-        this(id, title, text, dateOfPublication, category);
+    public Post(Long id, String title, String text, String category, User author) {
+        this(id, title, text, category);
         this.author = author;
     }
 

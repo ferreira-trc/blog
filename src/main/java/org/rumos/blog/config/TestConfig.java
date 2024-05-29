@@ -73,22 +73,13 @@ public class TestConfig implements CommandLineRunner{
     }
 
     public List<Post> postBuilder(int numberOfPost, List<User> useres) {
-        List<Post> list = new ArrayList<>();
-        LocalDateTime dateOfPublication = LocalDateTime.of(2024, 1, 1, 9, 0);
+        List<Post> list = new ArrayList<>();        
         String title = "title Post_";
         String body = "body Post_";        
 
         for (int i = 0; i < numberOfPost; i++) {
-            int userIndex = i % useres.size();
-            
-            list.add(new Post(null, title + i, body + i, dateOfPublication, "", useres.get(userIndex)));
-            
-            if (i % 2 == 0) {
-                dateOfPublication = dateOfPublication.plusDays(-i);
-            } else {
-                dateOfPublication = dateOfPublication.plusDays(i);
-            }
-            
+            int userIndex = i % useres.size();            
+            list.add(new Post(null, title + i, body + i, "", useres.get(userIndex)));            
         }
 
         return list;
@@ -112,7 +103,7 @@ public class TestConfig implements CommandLineRunner{
         }
         buffRead.close();
 
-        Post post = new Post(null, title, text.toString(), LocalDateTime.now(), "Poesia");
+        Post post = new Post(null, title, text.toString(),"Poesia");
 
         return post;
     }
