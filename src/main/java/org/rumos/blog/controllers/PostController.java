@@ -3,10 +3,9 @@ package org.rumos.blog.controllers;
 import java.net.URI;
 import java.util.List;
 
-import org.rumos.blog.model.dtos.post.PostGetDTO;
-import org.rumos.blog.model.dtos.post.PostPostDTO;
-import org.rumos.blog.model.dtos.post.PostPutDTO;
-import org.rumos.blog.model.entities.Post;
+import org.rumos.blog.model.dtos.post.PostDTOToShow;
+import org.rumos.blog.model.dtos.post.PostDTOToAdd;
+import org.rumos.blog.model.dtos.post.PostDTOToUpdate;
 import org.rumos.blog.services.interfaces.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +29,8 @@ public class PostController {
     private PostService postService;    
 
     @GetMapping    
-    public ResponseEntity<List<PostGetDTO>> getAll(@RequestParam(required = false) String order) {
-        List<PostGetDTO> list;
+    public ResponseEntity<List<PostDTOToShow>> getAll(@RequestParam(required = false) String order) {
+        List<PostDTOToShow> list;
 
         if ("cron".equals(order)) {
             list = postService.findAllByCronOrder();
@@ -43,14 +42,14 @@ public class PostController {
     }   
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<PostGetDTO> getById(@PathVariable Long id) {
-        PostGetDTO post = postService.findById(id);
+    public ResponseEntity<PostDTOToShow> getById(@PathVariable Long id) {
+        PostDTOToShow post = postService.findById(id);
         return ResponseEntity.ok().body(post);
     }
  
     @PostMapping
-    public ResponseEntity<PostGetDTO> post(@RequestBody PostPostDTO postDTO) {
-        PostGetDTO post = postService.add(postDTO);
+    public ResponseEntity<PostDTOToShow> post(@RequestBody PostDTOToAdd postDTO) {
+        PostDTOToShow post = postService.add(postDTO);
         URI uri = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
@@ -61,15 +60,15 @@ public class PostController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PostGetDTO> update(@PathVariable Long id, @RequestBody PostPutDTO postUpdated) {
-        PostGetDTO postToReturn = postService.update(id, postUpdated);        
+    public ResponseEntity<PostDTOToShow> update(@PathVariable Long id, @RequestBody PostDTOToUpdate postUpdated) {
+        PostDTOToShow postToReturn = postService.update(id, postUpdated);        
         return ResponseEntity.ok().body(postToReturn);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        postService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<PostDTOToShow> delete(@PathVariable Long id) {
+        PostDTOToShow postDeleted = postService.delete(id);
+        return ResponseEntity.ok().body(postDeleted);
     }
 
 

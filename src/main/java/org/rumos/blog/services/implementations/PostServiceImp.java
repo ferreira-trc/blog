@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.rumos.blog.model.dtos.maps.PostMapDTO;
-import org.rumos.blog.model.dtos.post.PostGetDTO;
-import org.rumos.blog.model.dtos.post.PostPostDTO;
-import org.rumos.blog.model.dtos.post.PostPutDTO;
+import org.rumos.blog.model.dtos.post.PostDTOToShow;
+import org.rumos.blog.model.dtos.post.PostDTOToAdd;
+import org.rumos.blog.model.dtos.post.PostDTOToUpdate;
 import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.model.entities.User;
 import org.rumos.blog.repositories.PostRepository;
@@ -25,9 +25,9 @@ public class PostServiceImp implements PostService{
     @Autowired
     private UserRepository userRepository;
         
-    public List<PostGetDTO> findAll() {
+    public List<PostDTOToShow> findAll() {
         List<Post> list = postRepository.findAll();
-        List<PostGetDTO> listOfDTOs = new ArrayList<>();
+        List<PostDTOToShow> listOfDTOs = new ArrayList<>();
 
         for (Post post : list) {
             listOfDTOs.add(PostMapDTO.convertToGetDTO(post));
@@ -36,20 +36,20 @@ public class PostServiceImp implements PostService{
         return listOfDTOs;
     }
 
-    public PostGetDTO findById(Long id) {
+    public PostDTOToShow findById(Long id) {
         Optional<Post> post = postRepository.findById(id);
 
         if (post.isEmpty()) {
             return null;
         }
 
-        PostGetDTO postGetDTO = PostMapDTO.convertToGetDTO(post.get());
+        PostDTOToShow postGetDTO = PostMapDTO.convertToGetDTO(post.get());
         return postGetDTO;
     }
 
-    public List<PostGetDTO> findAllByCronOrder() {
+    public List<PostDTOToShow> findAllByCronOrder() {
         List<Post> list = postRepository.findAllByOrderByCreatedAtDesc();  
-        List<PostGetDTO> listOfDTOs = new ArrayList<>();
+        List<PostDTOToShow> listOfDTOs = new ArrayList<>();
 
         for (Post post : list) {
             listOfDTOs.add(PostMapDTO.convertToGetDTO(post));
@@ -57,7 +57,7 @@ public class PostServiceImp implements PostService{
         return listOfDTOs;
     }
 
-    public PostGetDTO add(PostPostDTO postDTO) {
+    public PostDTOToShow add(PostDTOToAdd postDTO) {
         User author = userRepository.findByUserName(postDTO.authorUserName());
         Post postToSave = PostMapDTO.convertToClass(postDTO);
         postToSave.setAuthor(author);
@@ -67,15 +67,19 @@ public class PostServiceImp implements PostService{
         return PostMapDTO.convertToGetDTO(postoToReturn);
     }
     
-    public PostGetDTO update(Long postId, PostPutDTO postUpdated) {
+    public PostDTOToShow update(Long postId, PostDTOToUpdate postUpdated) {
         Post postToUpdate = postRepository.getReferenceById(postId);
         Post postToSave = PostMapDTO.convertToClass(postUpdated, postToUpdate);
         Post postToReturn = postRepository.save(postToSave);
-        PostGetDTO postDTO = PostMapDTO.convertToGetDTO(postToReturn);
+        PostDTOToShow postDTO = PostMapDTO.convertToGetDTO(postToReturn);
         return postDTO;
     }    
 
-    public void delete(Long id) {
+    public PostDTOToShow delete(Long id) { 
+        Optional<Post> postToDelete = postRepository.findById(id);
         postRepository.deleteById(id);
+
+        PostDTOToShow postToReturn = PostMapDTO.convertToGetDTO(postToDelete.get());
+        return postToReturn;
     }
 }
