@@ -1,9 +1,12 @@
 package org.rumos.blog.services.implementations;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import org.rumos.blog.model.dtos.post.PostGetDTO;
+import org.rumos.blog.model.dtos.post.PostMapDTO;
 import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.repositories.PostRepository;
 import org.rumos.blog.services.interfaces.PostService;
@@ -16,16 +19,23 @@ public class PostServiceImp implements PostService{
     @Autowired
     private PostRepository postRepository;
         
-    public List<Post> findAll() {
-        return postRepository.findAll();
+    public List<PostGetDTO> findAll() {
+        List<Post> list = postRepository.findAll();
+        List<PostGetDTO> listOfDTOs = new ArrayList<>();
+
+        for (Post post : list) {
+            listOfDTOs.add(PostMapDTO.convertoToGetDTO(post));
+        }
+
+        return listOfDTOs;
     }
 
-    public Post findById(Long id) {
+    public PostGetDTO findById(Long id) {
         Optional<Post> post = postRepository.findById(id);
         return post.get();
     }
 
-    public List<Post> findAllByCronOrder() {
+    public List<PostGetDTO> findAllByCronOrder() {
         List<Post> list = postRepository.findAll();
         Comparator<Post> comparatorPostByPublicationDate = (post1, post2) -> post1.compareTo(post2); 
         list.sort(comparatorPostByPublicationDate);
