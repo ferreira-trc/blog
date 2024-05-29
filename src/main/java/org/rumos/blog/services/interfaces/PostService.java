@@ -5,7 +5,6 @@ import java.util.List;
 import org.rumos.blog.model.dtos.post.PostGetDTO;
 import org.rumos.blog.model.dtos.post.PostPostDTO;
 import org.rumos.blog.model.dtos.post.PostPutDTO;
-import org.rumos.blog.model.entities.Post;
 
 public interface PostService {
     public List<PostGetDTO> findAll();

@@ -73,12 +73,7 @@ public class PostServiceImp implements PostService{
         Post postToReturn = postRepository.save(postToSave);
         PostGetDTO postDTO = PostMapDTO.convertToGetDTO(postToReturn);
         return postDTO;
-    }
-
-    private void updateDate(Post postToUpdate, Post postUpdated) {        
-        postToUpdate.setTitle(postUpdated.getTitle());
-        postToUpdate.setText(postUpdated.getText());       
-    }
+    }    
 
     public void delete(Long id) {
         postRepository.deleteById(id);
