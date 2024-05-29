@@ -1,14 +1,25 @@
-package org.rumos.blog.model.dtos.post;
+package org.rumos.blog.model.dtos.maps;
 
+import org.rumos.blog.model.dtos.post.PostGetDTO;
+import org.rumos.blog.model.dtos.post.PostPostDTO;
+import org.rumos.blog.model.dtos.post.PostPutDTO;
 import org.rumos.blog.model.entities.Post;
 
 public class PostMapDTO {
 
-    public static Post convertoToClass(PostPostDTO postDTO) {
+    public static Post convertToClass(PostPostDTO postDTO) {
         Post post = new Post();
         post.setTitle(postDTO.title());
         post.setText(postDTO.text());
         post.setCategory(postDTO.category());
+
+        return post;
+    }
+
+    public static Post convertToClass(PostPutDTO postDTO) {
+        Post post = new Post();
+        post.setTitle(postDTO.title());
+        post.setText(postDTO.text());        
 
         return post;
     }

@@ -1,8 +1,6 @@
 package org.rumos.blog.model.entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
