@@ -48,10 +48,7 @@ public class PostServiceImp implements PostService{
     }
 
     public List<PostGetDTO> findAllByCronOrder() {
-        List<Post> list = postRepository.findAll();
-        Comparator<Post> comparatorPostByPublicationDate = (post1, post2) -> post1.compareTo(post2); 
-        list.sort(comparatorPostByPublicationDate);
-
+        List<Post> list = postRepository.findAllByOrderByCreatedAtDesc();  
         List<PostGetDTO> listOfDTOs = new ArrayList<>();
 
         for (Post post : list) {

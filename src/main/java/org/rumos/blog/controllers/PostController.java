@@ -32,7 +32,7 @@ public class PostController {
     public ResponseEntity<List<PostGetDTO>> getAll(@RequestParam(required = false) String order) {
         List<PostGetDTO> list;
 
-        if (order.equals("cron")) {
+        if ("cron".equals(order)) {
             list = postService.findAllByCronOrder();
         } else { 
             list = postService.findAll();
