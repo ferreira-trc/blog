@@ -3,6 +3,7 @@ package org.rumos.blog.controllers;
 import java.net.URI;
 import java.util.List;
 
+import org.rumos.blog.model.dtos.post.PostGetDTO;
 import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.services.interfaces.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class PostController {
     private PostService postService;    
 
     @GetMapping    
-    public ResponseEntity<List<Post>> getAll(@RequestParam(required = false) String order) {
-        List<Post> list;
+    public ResponseEntity<List<PostGetDTO>> getAll(@RequestParam(required = false) String order) {
+        List<PostGetDTO> list;
 
         if (order.equals("cron")) {
             list = postService.findAllByCronOrder();
@@ -40,8 +41,8 @@ public class PostController {
     }   
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Post> getById(@PathVariable Long id) {
-        Post post = postService.findById(id);
+    public ResponseEntity<PostGetDTO> getById(@PathVariable Long id) {
+        PostGetDTO post = postService.findById(id);
         return ResponseEntity.ok().body(post);
     }
  
