@@ -14,13 +14,7 @@ public class PostMapDTO {
     }
 
     public static PostGetDTO convertToGetDTO(Post post) {
-        PostGetDTO postGetDTO = new PostGetDTO();
-        postGetDTO.setId(post.getId());
-        postGetDTO.setTitle(post.getTitle());
-        postGetDTO.setText(post.getText());
-        postGetDTO.setCategory(post.getCategory());
-        postGetDTO.setAuthorUserName(post.getAuthor().getUserName());
-
+        PostGetDTO postGetDTO = new PostGetDTO(post.getId(), post.getTitle(), post.getText(), post.getCategory(), post.getAuthor().getUserName());
         return postGetDTO;
     }
 

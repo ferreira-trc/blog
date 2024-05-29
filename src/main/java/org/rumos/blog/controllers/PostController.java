@@ -50,8 +50,12 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostGetDTO> post(@RequestBody PostPostDTO postDTO) {
         PostGetDTO post = postService.add(postDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(post.getId()).toUri();        
+        URI uri = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(post.id())
+                    .toUri();
+                            
         return ResponseEntity.created(uri).body(post);
     }
 
