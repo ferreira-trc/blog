@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.rumos.blog.model.dtos.post.PostGetDTO;
 import org.rumos.blog.model.dtos.post.PostPostDTO;
+import org.rumos.blog.model.dtos.post.PostPutDTO;
 import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.services.interfaces.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,14 +56,14 @@ public class PostController {
                     .path("/{id}")
                     .buildAndExpand(post.id())
                     .toUri();
-                            
+
         return ResponseEntity.created(uri).body(post);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Post> update(@PathVariable Long id, @RequestBody Post post) {
-        post = postService.update(id, post);        
-        return ResponseEntity.ok().body(post);
+    public ResponseEntity<PostGetDTO> update(@PathVariable Long id, @RequestBody PostPutDTO postUpdated) {
+        PostGetDTO postToReturn = postService.update(id, postUpdated);        
+        return ResponseEntity.ok().body(postToReturn);
     }
 
     @DeleteMapping(value = "/{id}")

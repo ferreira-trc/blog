@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.rumos.blog.model.dtos.maps.PostMapDTO;
 import org.rumos.blog.model.dtos.post.PostGetDTO;
 import org.rumos.blog.model.dtos.post.PostPostDTO;
+import org.rumos.blog.model.dtos.post.PostPutDTO;
 import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.model.entities.User;
 import org.rumos.blog.repositories.PostRepository;
@@ -66,10 +67,12 @@ public class PostServiceImp implements PostService{
         return PostMapDTO.convertToGetDTO(postoToReturn);
     }
     
-    public Post update(Long postId, Post postUpdated) {
+    public PostGetDTO update(Long postId, PostPutDTO postUpdated) {
         Post postToUpdate = postRepository.getReferenceById(postId);
-        updateDate(postToUpdate, postUpdated);
-        return postRepository.save(postToUpdate);
+        Post postToSave = PostMapDTO.convertToClass(postUpdated, postToUpdate);
+        Post postToReturn = postRepository.save(postToSave);
+        PostGetDTO postDTO = PostMapDTO.convertToGetDTO(postToReturn);
+        return postDTO;
     }
 
     private void updateDate(Post postToUpdate, Post postUpdated) {        

@@ -16,8 +16,7 @@ public class PostMapDTO {
         return post;
     }
 
-    public static Post convertToClass(PostPutDTO postDTO) {
-        Post post = new Post();
+    public static Post convertToClass(PostPutDTO postDTO, Post post) {        
         post.setTitle(postDTO.title());
         post.setText(postDTO.text());        
 
