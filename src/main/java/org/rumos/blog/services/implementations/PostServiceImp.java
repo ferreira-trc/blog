@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.rumos.blog.model.dtos.maps.PostMapDTO;
+import org.rumos.blog.model.dtos.maps.interfaces.PostMapDTO;
 import org.rumos.blog.model.dtos.post.PostDTOToShow;
 import org.rumos.blog.model.dtos.post.PostDTOToAdd;
 import org.rumos.blog.model.dtos.post.PostDTOToUpdate;
@@ -24,13 +24,17 @@ public class PostServiceImp implements PostService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PostMapDTO postMapDTO;
+   
         
     public List<PostDTOToShow> findAll() {
         List<Post> list = postRepository.findAll();
         List<PostDTOToShow> listOfDTOs = new ArrayList<>();
 
         for (Post post : list) {
-            listOfDTOs.add(PostMapDTO.convertToGetDTO(post));
+            listOfDTOs.add(postMapDTO.convertToDTO(post));
         }
 
         return listOfDTOs;
@@ -43,7 +47,7 @@ public class PostServiceImp implements PostService{
             return null;
         }
 
-        PostDTOToShow postGetDTO = PostMapDTO.convertToGetDTO(post.get());
+        PostDTOToShow postGetDTO = postMapDTO.convertToDTO(post.get());
         return postGetDTO;
     }
 
@@ -52,26 +56,26 @@ public class PostServiceImp implements PostService{
         List<PostDTOToShow> listOfDTOs = new ArrayList<>();
 
         for (Post post : list) {
-            listOfDTOs.add(PostMapDTO.convertToGetDTO(post));
+            listOfDTOs.add(postMapDTO.convertToDTO(post));
         }
         return listOfDTOs;
     }
 
     public PostDTOToShow add(PostDTOToAdd postDTO) {
         User author = userRepository.findByUserName(postDTO.authorUserName());
-        Post postToSave = PostMapDTO.convertToClass(postDTO);
+        Post postToSave = postMapDTO.convertToClass(postDTO);
         postToSave.setAuthor(author);
 
         Post postoToReturn = postRepository.save(postToSave);        
 
-        return PostMapDTO.convertToGetDTO(postoToReturn);
+        return postMapDTO.convertToDTO(postoToReturn);
     }
     
     public PostDTOToShow update(Long postId, PostDTOToUpdate postUpdated) {
         Post postToUpdate = postRepository.getReferenceById(postId);
-        Post postToSave = PostMapDTO.convertToClass(postUpdated, postToUpdate);
+        Post postToSave = postMapDTO.convertToClass(postUpdated, postToUpdate);
         Post postToReturn = postRepository.save(postToSave);
-        PostDTOToShow postDTO = PostMapDTO.convertToGetDTO(postToReturn);
+        PostDTOToShow postDTO = postMapDTO.convertToDTO(postToReturn);
         return postDTO;
     }    
 
@@ -79,7 +83,7 @@ public class PostServiceImp implements PostService{
         Optional<Post> postToDelete = postRepository.findById(id);
         postRepository.deleteById(id);
 
-        PostDTOToShow postToReturn = PostMapDTO.convertToGetDTO(postToDelete.get());
+        PostDTOToShow postToReturn = postMapDTO.convertToDTO(postToDelete.get());
         return postToReturn;
     }
 }
