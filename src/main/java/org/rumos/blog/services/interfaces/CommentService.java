@@ -2,13 +2,15 @@ package org.rumos.blog.services.interfaces;
 
 import java.util.List;
 
-import org.rumos.blog.model.entities.Comment;
+import org.rumos.blog.model.dtos.entities.comment.CommentDTOToAdd;
+import org.rumos.blog.model.dtos.entities.comment.CommentDTOToShow;
+import org.rumos.blog.model.dtos.entities.comment.CommentDTOToUpdate;
 
 public interface CommentService {
 
-    public List<Comment> findAll();
-    public Comment findById(Long id);
-    public Comment add(Long postId,Comment comment);
-    public Comment update(Long id, Comment commentUpdated);
-    public void delete(Long id);
+    public List<CommentDTOToShow> findAll();
+    public CommentDTOToShow findById(Long id);
+    public CommentDTOToShow add(Long postId, CommentDTOToAdd comment);
+    public CommentDTOToShow update(Long id, CommentDTOToUpdate commentUpdated);
+    public CommentDTOToShow delete(Long id);
 }

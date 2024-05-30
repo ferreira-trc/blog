@@ -1,12 +1,18 @@
-package org.rumos.blog.services.implementations;
+ package org.rumos.blog.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.rumos.blog.model.dtos.entities.comment.CommentDTOToAdd;
+import org.rumos.blog.model.dtos.entities.comment.CommentDTOToShow;
+import org.rumos.blog.model.dtos.entities.comment.CommentDTOToUpdate;
+import org.rumos.blog.model.dtos.maps.interfaces.CommentMapDTO;
 import org.rumos.blog.model.entities.Comment;
 import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.repositories.CommentRepository;
 import org.rumos.blog.repositories.PostRepository;
+import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,36 +29,66 @@ public class CommentServiceImp implements CommentService{
     @Autowired
     private PostRepository postRepository;
 
-    public List<Comment> findAll() {
-        return commentRepository.findAll();
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CommentMapDTO commentMapDTO;
+
+    public List<CommentDTOToShow> findAll() {
+        List<Comment> list = commentRepository.findAll();
+        List<CommentDTOToShow> listOfDTOs = new ArrayList<>();
+
+        for (Comment comment : list) {
+            listOfDTOs.add(commentMapDTO.convertToDTO(comment));
+        }
+
+        return listOfDTOs;
     }
 
-    public Comment findById(Long id) {
+    public CommentDTOToShow findById(Long id) {
         Optional<Comment> comment = commentRepository.findById(id);
-        return comment.get();
+
+        if (comment.isEmpty()) {
+            return null;
+        }
+
+        CommentDTOToShow commentDTOToShow = commentMapDTO.convertToDTO(comment.get());
+        return commentDTOToShow;
     }   
     
-    public Comment add(Long postId,Comment comment) { 
+    public CommentDTOToShow add(Long postId,CommentDTOToAdd comment) { 
         Optional<Post> commentedPost = postRepository.findById(postId);
+
         if (commentedPost.isPresent()) {
-            comment.setPost(commentedPost.get());
-            return commentRepository.save(comment);
-        }     
+            Comment commentToSave = commentMapDTO.convertToClass(comment);
+
+            commentToSave.setPost(commentedPost.get());
+            commentToSave.setAuthor(userRepository.findByUserName(comment.authorUserName()));
+
+            Comment commentSaved = commentRepository.save(commentToSave);
+
+            return commentMapDTO.convertToDTO(commentSaved);
+        }
+
         throw new EntityNotFoundException("Post not found");
     }
 
-    public Comment update(Long id, Comment commentUpdated) {
+    public CommentDTOToShow update(Long id, CommentDTOToUpdate commentUpdated) {
         Comment commentToUpdate = commentRepository.getReferenceById(id);
-        updateDate(commentUpdated, commentToUpdate);
-        return commentRepository.save(commentToUpdate);
-    }
+        Comment commentToSave = commentMapDTO.convertToClass(commentUpdated, commentToUpdate);
+        Comment commentToReturn = commentRepository.save(commentToSave);
+        CommentDTOToShow commnetDTO = commentMapDTO.convertToDTO(commentToReturn);
+        
+        return commnetDTO;
+    }    
 
-    private void updateDate(Comment commentUpdated, Comment commentToUpdate) {
-        commentToUpdate.setText(commentUpdated.getText());
-    }
-
-    public void delete(Long id) {
+    public CommentDTOToShow delete(Long id) {
+        Optional<Comment> commentToDelete = commentRepository.findById(id);        
         commentRepository.deleteById(id);        
+
+        CommentDTOToShow commentDeleted = commentMapDTO.convertToDTO(commentToDelete.get());
+        return commentDeleted;
     }
     
 }

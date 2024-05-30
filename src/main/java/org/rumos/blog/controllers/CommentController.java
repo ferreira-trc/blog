@@ -3,6 +3,9 @@ package org.rumos.blog.controllers;
 import java.net.URI;
 import java.util.List;
 
+import org.rumos.blog.model.dtos.entities.comment.CommentDTOToAdd;
+import org.rumos.blog.model.dtos.entities.comment.CommentDTOToShow;
+import org.rumos.blog.model.dtos.entities.comment.CommentDTOToUpdate;
 import org.rumos.blog.model.entities.Comment;
 import org.rumos.blog.services.interfaces.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,34 +31,38 @@ public class CommentController {
     private CommentService commentService;    
 
     @GetMapping    
-    public ResponseEntity<List<Comment>> findAll() {
-        List<Comment> list = commentService.findAll();
+    public ResponseEntity<List<CommentDTOToShow>> findAll() {
+        List<CommentDTOToShow> list = commentService.findAll();
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Comment> getMethodName(@PathVariable Long id) {
-        Comment comment = commentService.findById(id);
+    public ResponseEntity<CommentDTOToShow> getById(@PathVariable Long id) {
+        CommentDTOToShow comment = commentService.findById(id);
         return ResponseEntity.ok().body(comment);
     }
 
     @PostMapping
-    public ResponseEntity<Comment> post(@RequestParam Long postId, @RequestBody Comment comment) {
-        comment = commentService.add(postId,comment);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(comment.getId()).toUri();        
+    public ResponseEntity<CommentDTOToShow> post(@RequestParam Long postId, @RequestBody CommentDTOToAdd commentDTO) {
+        CommentDTOToShow comment = commentService.add(postId,commentDTO);
+        URI uri = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(comment.id())
+                    .toUri();
+
         return ResponseEntity.created(uri).body(comment);
     }
 
     @PutMapping( value = "/{id}")
-    public ResponseEntity<Comment> put(@PathVariable Long id, @RequestBody Comment comment) {
-        comment = commentService.update(id, comment);        
-        return ResponseEntity.ok().body(comment);
+    public ResponseEntity<CommentDTOToShow> put(@PathVariable Long id, @RequestBody CommentDTOToUpdate commentToUpdate) {
+        CommentDTOToShow commentToReturn = commentService.update(id, commentToUpdate);        
+        return ResponseEntity.ok().body(commentToReturn);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        commentService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<CommentDTOToShow> delete(@PathVariable Long id) {
+        CommentDTOToShow commentDeleted = commentService.delete(id);
+        return ResponseEntity.ok().body(commentDeleted);
     }
 }
