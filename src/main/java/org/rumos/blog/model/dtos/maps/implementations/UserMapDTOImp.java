@@ -1,9 +1,9 @@
 package org.rumos.blog.model.dtos.maps.implementations;
 
+import org.rumos.blog.model.dtos.entities.user.UserDTOToAdd;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdate;
 import org.rumos.blog.model.dtos.maps.interfaces.UserMapDTO;
-import org.rumos.blog.model.dtos.user.UserDTOToAdd;
-import org.rumos.blog.model.dtos.user.UserDTOToShow;
-import org.rumos.blog.model.dtos.user.UserDTOToUpdate;
 import org.rumos.blog.model.entities.User;
 import org.rumos.blog.model.enums.Role;
 

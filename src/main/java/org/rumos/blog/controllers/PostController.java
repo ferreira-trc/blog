@@ -3,9 +3,9 @@ package org.rumos.blog.controllers;
 import java.net.URI;
 import java.util.List;
 
-import org.rumos.blog.model.dtos.post.PostDTOToShow;
-import org.rumos.blog.model.dtos.post.PostDTOToAdd;
-import org.rumos.blog.model.dtos.post.PostDTOToUpdate;
+import org.rumos.blog.model.dtos.entities.post.PostDTOToAdd;
+import org.rumos.blog.model.dtos.entities.post.PostDTOToShow;
+import org.rumos.blog.model.dtos.entities.post.PostDTOToUpdate;
 import org.rumos.blog.services.interfaces.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

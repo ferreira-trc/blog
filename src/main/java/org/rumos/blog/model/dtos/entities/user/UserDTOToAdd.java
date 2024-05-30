@@ -1,4 +1,4 @@
-package org.rumos.blog.model.dtos.user;
+package org.rumos.blog.model.dtos.entities.user;
 
 import org.rumos.blog.model.enums.Role;
 
