@@ -31,7 +31,7 @@ public class Comment extends BaseEntity implements Serializable{
     public Comment() {
     }
 
-    public Comment(Long id, String text, LocalDateTime dateOfPublication, User author, Post post) {
+    public Comment(Long id, String text, User author, Post post) {
         super(id);      
         this.text = text;        
         this.author = author;
