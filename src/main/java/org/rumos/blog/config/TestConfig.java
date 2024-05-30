@@ -61,31 +61,34 @@ public class TestConfig implements CommandLineRunner{
         post1.setAuthor(user1);
         post2.setAuthor(user2);
 
-        postRepository.saveAll(postBuilder(100, Arrays.asList(user1,user2)));
+        postBuilder(100, Arrays.asList(user1,user2));
 
-        Comment comment1 = new Comment(null, "Gosto deste poema",LocalDateTime.now(), user1, post1);
-        Comment comment2 = new Comment(null, "Adoro deste poema",LocalDateTime.now(), user2, post1);
-        Comment comment3 = new Comment(null, "Adoro FP", LocalDateTime.now(), user2, post2);
-        Comment comment4 = new Comment(null, "Viva ao quinto imperio", LocalDateTime.now(), user1, post2);
+        Comment comment1 = new Comment(null, "Gosto deste poema", user1, post1);
+        Comment comment2 = new Comment(null, "Adoro deste poema", user2, post1);
+        Comment comment3 = new Comment(null, "Adoro FP", user2, post2);
+        Comment comment4 = new Comment(null, "Viva ao quinto imperio", user1, post2);
 
         //commentRepository.saveAll(Arrays.asList(comment1, comment2, comment3, comment4));
         
     }
 
-    public List<Post> postBuilder(int numberOfPost, List<User> useres) {
+    public void postBuilder(int numberOfPost, List<User> useres) {
         List<Post> list = new ArrayList<>();        
         String title = "title Post_";
         String body = "body Post_";        
 
         for (int i = 0; i < numberOfPost; i++) {
-            int userIndex = i % useres.size();            
-            list.add(new Post(null, title + i, body + i, "", useres.get(userIndex)));            
+            int userIndex = i % useres.size();
+            Post post = new Post(null, title + i, body + i, "", useres.get(userIndex));           
+            postRepository.save(post);
+            List<Comment> postComments = commentBuilder(10, useres, post);
+            commentRepository.saveAll(postComments);
         }
 
-        return list;
+        
     }
 
-    public Post postPoemOfFPBuilder (String path) throws IOException {
+    public Post postPoemOfFPBuilder(String path) throws IOException {
         BufferedReader buffRead = new BufferedReader(new FileReader(path));
         StringBuilder text = new StringBuilder();
         String title = "";
@@ -106,6 +109,19 @@ public class TestConfig implements CommandLineRunner{
         Post post = new Post(null, title, text.toString(),"Poesia");
 
         return post;
+    }
+
+    public List<Comment> commentBuilder(int numberOfComments, List<User> useres, Post post) {  
+        List<Comment> list = new ArrayList<>();      
+        String commentContent = "comment_";
+
+        for (int i = 0; i < numberOfComments; i++) {
+            int userIndex = i % useres.size(); 
+            Comment comment = new Comment(null, commentContent, useres.get(userIndex), post);    
+            list.add(comment);        
+        }
+
+        return list;
     }
 
 }
