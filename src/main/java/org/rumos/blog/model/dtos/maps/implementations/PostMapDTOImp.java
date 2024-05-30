@@ -5,7 +5,9 @@ import org.rumos.blog.model.dtos.entities.post.PostDTOToShow;
 import org.rumos.blog.model.dtos.entities.post.PostDTOToUpdate;
 import org.rumos.blog.model.dtos.maps.interfaces.PostMapDTO;
 import org.rumos.blog.model.entities.Post;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PostMapDTOImp implements PostMapDTO {
     
     @Override

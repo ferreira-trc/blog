@@ -5,7 +5,9 @@ import org.rumos.blog.model.dtos.entities.comment.CommentDTOToShow;
 import org.rumos.blog.model.dtos.entities.comment.CommentDTOToUpdate;
 import org.rumos.blog.model.dtos.maps.interfaces.CommentMapDTO;
 import org.rumos.blog.model.entities.Comment;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CommentMapDTOImp implements CommentMapDTO{
 
     @Override
