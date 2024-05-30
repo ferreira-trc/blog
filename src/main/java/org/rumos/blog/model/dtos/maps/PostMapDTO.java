@@ -5,28 +5,39 @@ import org.rumos.blog.model.dtos.post.PostDTOToAdd;
 import org.rumos.blog.model.dtos.post.PostDTOToUpdate;
 import org.rumos.blog.model.entities.Post;
 
-public class PostMapDTO {
+public class PostMapDTO implements EntityMapDTO<Post, PostDTOToShow, PostDTOToAdd, PostDTOToUpdate> {
+    
+    @Override
+    public Post convertToClass(PostDTOToAdd entityDTO) {
+        Post entity = new Post();
+        entity.setTitle(entityDTO.title());
+        entity.setText(entityDTO.text());
+        entity.setCategory(entityDTO.category());
 
-    public static Post convertToClass(PostDTOToAdd postDTO) {
-        Post post = new Post();
-        post.setTitle(postDTO.title());
-        post.setText(postDTO.text());
-        post.setCategory(postDTO.category());
-
-        return post;
+        return entity;
     }
 
-    public static Post convertToClass(PostDTOToUpdate postDTO, Post post) {        
-        post.setTitle(postDTO.title());
-        post.setText(postDTO.text());        
+    @Override
+    public Post convertToClass(PostDTOToUpdate entityDTO, Post entity) {        
+        entity.setTitle(entityDTO.title());
+        entity.setText(entityDTO.text());        
 
-        return post;
+        return entity;
     }
 
-    public static PostDTOToShow convertToGetDTO(Post post) {
-        PostDTOToShow postGetDTO = new PostDTOToShow(post.getId(), post.getTitle(), post.getText(), post.getCategory(), post.getAuthor().getUserName());
-        return postGetDTO;
+    @Override
+    public PostDTOToShow convertToDTO(Post entity) {
+        Long id = entity.getId();
+        String title = entity.getTitle();
+        String text = entity.getText();
+        String category = entity.getCategory();
+        String authorUserName = entity.getAuthor().getUserName();
+        PostDTOToShow entityDTO = new PostDTOToShow(id, title, text, category, authorUserName);
+
+        return entityDTO;
     }
+
+   
 
     
 }
