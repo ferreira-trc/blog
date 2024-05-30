@@ -36,9 +36,6 @@ public class PostMapDTOImp implements PostMapDTO {
         PostDTOToShow entityDTO = new PostDTOToShow(id, title, text, category, authorUserName);
 
         return entityDTO;
-    }
-
-   
-
+    }   
     
 }
