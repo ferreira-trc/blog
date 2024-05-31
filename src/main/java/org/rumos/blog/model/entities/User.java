@@ -35,7 +35,7 @@ public class User extends BaseEntity implements Serializable{
     private Set<Post> posts = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.REMOVE})
     private Set<Comment> comments = new HashSet<>();
 
     public User() {
