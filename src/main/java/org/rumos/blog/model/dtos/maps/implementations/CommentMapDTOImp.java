@@ -12,8 +12,7 @@ public class CommentMapDTOImp implements CommentMapDTO{
 
     @Override
     public Comment convertToClass(CommentDTOToAdd entityDTO) {
-        Comment entity = new Comment();
-        entity.setPost(null);
+        Comment entity = new Comment();       
         entity.setText(entityDTO.commentContent());
         entity.setAuthor(null);
 
