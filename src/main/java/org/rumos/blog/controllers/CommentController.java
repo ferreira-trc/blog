@@ -6,7 +6,6 @@ import java.util.List;
 import org.rumos.blog.model.dtos.entities.comment.CommentDTOToAdd;
 import org.rumos.blog.model.dtos.entities.comment.CommentDTOToShow;
 import org.rumos.blog.model.dtos.entities.comment.CommentDTOToUpdate;
-import org.rumos.blog.model.entities.Comment;
 import org.rumos.blog.services.interfaces.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -42,8 +40,9 @@ public class CommentController {
         return ResponseEntity.ok().body(comment);
     }
 
-    @PostMapping
-    public ResponseEntity<CommentDTOToShow> post(@RequestParam Long postId, @RequestBody CommentDTOToAdd commentDTO) {
+    @PostMapping(value = "post/{postId}")
+    public ResponseEntity<CommentDTOToShow> post(@PathVariable Long postId, @RequestBody CommentDTOToAdd commentDTO) {
+        
         CommentDTOToShow comment = commentService.add(postId,commentDTO);
         URI uri = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -55,7 +54,7 @@ public class CommentController {
     }
 
     @PutMapping( value = "/{id}")
-    public ResponseEntity<CommentDTOToShow> put(@PathVariable Long id, @RequestBody CommentDTOToUpdate commentToUpdate) {
+    public ResponseEntity<CommentDTOToShow> put(@PathVariable Long id, @RequestBody(required = true) CommentDTOToUpdate commentToUpdate) {
         CommentDTOToShow commentToReturn = commentService.update(id, commentToUpdate);        
         return ResponseEntity.ok().body(commentToReturn);
     }
