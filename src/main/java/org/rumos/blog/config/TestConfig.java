@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -72,8 +71,7 @@ public class TestConfig implements CommandLineRunner{
         
     }
 
-    public void postBuilder(int numberOfPost, List<User> useres) {
-        List<Post> list = new ArrayList<>();        
+    public void postBuilder(int numberOfPost, List<User> useres) {        
         String title = "title Post_";
         String body = "body Post_";        
 

@@ -1,4 +1,4 @@
- package org.rumos.blog.services.implementations;
+package org.rumos.blog.services.implementations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public class CommentServiceImp implements CommentService{
         return commentDTOToShow;
     }   
     
-    public CommentDTOToShow add(Long postId,CommentDTOToAdd comment) { 
+    public CommentDTOToShow add(Long postId, CommentDTOToAdd comment) { 
         Optional<Post> commentedPost = postRepository.findById(postId);
 
         if (commentedPost.isPresent()) {
