@@ -2,12 +2,14 @@ package org.rumos.blog.services.interfaces;
 
 import java.util.List;
 
-import org.rumos.blog.model.entities.User;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToAdd;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdate;
 
 public interface UserService {
-    public List<User> findAll();
-    public User findById(Long id);
-    public User add(User user);
-    public User update(Long postId, User userUpdated);
-    public void delete(Long id);
+    public List<UserDTOToShow> findAll();
+    public UserDTOToShow findById(Long id);
+    public UserDTOToShow add(UserDTOToAdd userDTO);
+    public UserDTOToShow update(Long postId, UserDTOToUpdate userUpdated);
+    public UserDTOToShow delete(Long id);
 }

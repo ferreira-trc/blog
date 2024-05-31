@@ -1,10 +1,11 @@
 package org.rumos.blog.controllers;
 
-
 import java.net.URI;
 import java.util.List;
 
-import org.rumos.blog.model.entities.User;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToAdd;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdate;
 import org.rumos.blog.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
-
-
-
 @RestController
 @RequestMapping (value = "/user")
 public class UserController {
@@ -30,34 +28,39 @@ public class UserController {
     private UserService userService;    
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
-        List<User> list = userService.findAll();
+    public ResponseEntity<List<UserDTOToShow>> findAll() {
+        List<UserDTOToShow> list = userService.findAll();
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> getMethodName(@PathVariable Long id) {
-        User user = userService.findById(id);
+    public ResponseEntity<UserDTOToShow> getMethodName(@PathVariable Long id) {
+        UserDTOToShow user = userService.findById(id);
         return ResponseEntity.ok().body(user);
     }
 
     @PostMapping
-    public ResponseEntity<User> post(@RequestBody User user) {
-        user = userService.add(user);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(user.getId()).toUri();        
+    public ResponseEntity<UserDTOToShow> post(@RequestBody UserDTOToAdd userDTO) {
+        UserDTOToShow user = userService.add(userDTO);
+
+        URI uri = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(user.id())
+                    .toUri();
+
         return ResponseEntity.created(uri).body(user);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<User> put(@PathVariable Long id, @RequestBody User user) {
-        user = userService.update(id, user);        
+    public ResponseEntity<UserDTOToShow> put(@PathVariable Long id, @RequestBody UserDTOToUpdate userUpdated) {
+        UserDTOToShow user = userService.update(id, userUpdated);        
         return ResponseEntity.ok().body(user);
     }
     
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> post(@PathVariable Long id) {
-        userService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<UserDTOToShow> post(@PathVariable Long id) {
+        UserDTOToShow userToDelete = userService.delete(id);
+        return ResponseEntity.ok().body(userToDelete);
     }
 }

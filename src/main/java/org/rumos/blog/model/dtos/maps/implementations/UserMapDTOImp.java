@@ -6,7 +6,9 @@ import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdate;
 import org.rumos.blog.model.dtos.maps.interfaces.UserMapDTO;
 import org.rumos.blog.model.entities.User;
 import org.rumos.blog.model.enums.Role;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserMapDTOImp implements UserMapDTO{
 
     @Override

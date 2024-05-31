@@ -1,8 +1,13 @@
 package org.rumos.blog.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.rumos.blog.model.dtos.entities.user.UserDTOToAdd;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdate;
+import org.rumos.blog.model.dtos.maps.interfaces.UserMapDTO;
 import org.rumos.blog.model.entities.User;
 import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.UserService;
@@ -14,34 +19,53 @@ public class UserServiceImp implements UserService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserMapDTO userMapDTO;
    
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserDTOToShow> findAll() {
+        List<User> list = userRepository.findAll();
+        List<UserDTOToShow> listDTOs = new ArrayList<>();
+
+        for (User user : list) {
+            listDTOs.add(userMapDTO.convertToDTO(user));
+        }
+
+        return listDTOs;
     }
 
-    public User findById(Long id) {
-        Optional<User> person = userRepository.findById(id);
-        return person.get();
+    public UserDTOToShow findById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+
+        if (user.isEmpty()) {
+            return null;
+        }
+
+        UserDTOToShow userDTO = userMapDTO.convertToDTO(user.get());
+        return userDTO;
     }
 
-    public User add(User user) {        
-        return userRepository.save(user);
+    public UserDTOToShow add(UserDTOToAdd userDTO) { 
+        User userToSave = userMapDTO.convertToClass(userDTO);
+        User userToReturn = userRepository.save(userToSave);
+                
+        return userMapDTO.convertToDTO(userToReturn);
     }
 
-    public User update(Long postId, User userUpdated) {
-        User postToUpdate = userRepository.getReferenceById(postId);
-        updateDate(postToUpdate, userUpdated);
-        return userRepository.save(postToUpdate);
-    }
+    public UserDTOToShow update(Long userId, UserDTOToUpdate userUpdated) {
+        User userToUpdate = userRepository.getReferenceById(userId);
+        User userToSave = userMapDTO.convertToClass(userUpdated, userToUpdate);
+        User userToReturn = userRepository.save(userToSave);
+        UserDTOToShow userDTO = userMapDTO.convertToDTO(userToReturn);
+        return userDTO;
+    }   
 
-    private void updateDate(User userToUpdate, User userUpdated) {        
-        userToUpdate.setUserName(userUpdated.getUserName());
-        userToUpdate.setPassword(userUpdated.getPassword());
-        userToUpdate.setRole(userUpdated.getRole());       
-    }
+    public UserDTOToShow delete(Long id) {
+        Optional<User> userToDelete = userRepository.findById(id);        
+        userRepository.deleteById(id);        
 
-    public void delete(Long id) {
-        userRepository.deleteById(id);
+        UserDTOToShow userDeleted = userMapDTO.convertToDTO(userToDelete.get());
+        return userDeleted;        
     }
 
 }
