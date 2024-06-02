@@ -29,7 +29,7 @@ public class CommentController {
     private CommentService commentService;    
 
     @GetMapping    
-    public ResponseEntity<List<CommentDTOToShow>> findAll() {
+    public ResponseEntity<List<CommentDTOToShow>> getAll() {
         List<CommentDTOToShow> list = commentService.findAll();
         return ResponseEntity.ok().body(list);
     }
@@ -40,7 +40,14 @@ public class CommentController {
         return ResponseEntity.ok().body(comment);
     }
 
-    @PostMapping(value = "post/{postId}")
+    @GetMapping(value = "/post/{postId}")
+    public ResponseEntity<List<CommentDTOToShow>> getByPost(@PathVariable Long postId) {
+        List<CommentDTOToShow> comments = commentService.findAllOfThePostId(postId);
+        return ResponseEntity.ok().body(comments);
+    }
+
+
+    @PostMapping(value = "/post/{postId}")
     public ResponseEntity<CommentDTOToShow> post(@PathVariable Long postId, @RequestBody CommentDTOToAdd commentDTO) {
         
         CommentDTOToShow comment = commentService.add(postId,commentDTO);
