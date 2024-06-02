@@ -46,6 +46,17 @@ public class CommentServiceImp implements CommentService{
         return listOfDTOs;
     }
 
+    public List<CommentDTOToShow> findAllOfThePostId(Long postId) {
+        List<Comment> list = commentRepository.findByPostId(postId);
+        List<CommentDTOToShow> listOfDTOs = new ArrayList<>();
+
+        for (Comment comment : list) {
+            listOfDTOs.add(commentMapDTO.convertToDTO(comment));
+        }
+
+        return listOfDTOs;
+    }
+
     public CommentDTOToShow findById(Long id) {
         Optional<Comment> comment = commentRepository.findById(id);
 
