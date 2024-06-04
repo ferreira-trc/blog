@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,8 +42,15 @@ public class CommentController {
     }
 
     @GetMapping(value = "/post/{postId}")
-    public ResponseEntity<List<CommentDTOToShow>> getByPost(@PathVariable Long postId) {
-        List<CommentDTOToShow> comments = commentService.findAllOfThePostId(postId);
+    public ResponseEntity<List<CommentDTOToShow>> getByPost(@RequestParam(required = false) String order,@PathVariable Long postId) {
+        List<CommentDTOToShow> comments;
+
+        if ("cron".equals(order)) {
+            comments = commentService.findAllOfThePostId(postId);
+        } else {
+            comments = commentService.findAllOfThePostIdByCronOrder(postId);    
+        }
+
         return ResponseEntity.ok().body(comments);
     }
 
