@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.rumos.blog.model.entities.Category;
 import org.rumos.blog.model.entities.Comment;
 import org.rumos.blog.model.entities.Person;
 import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.model.entities.User;
 import org.rumos.blog.model.enums.Role;
+import org.rumos.blog.repositories.CategoryRepository;
 import org.rumos.blog.repositories.CommentRepository;
 import org.rumos.blog.repositories.PersonRepository;
 import org.rumos.blog.repositories.PostRepository;
@@ -38,6 +40,9 @@ public class TestConfig implements CommandLineRunner{
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -54,18 +59,18 @@ public class TestConfig implements CommandLineRunner{
         String path1 = "Mar Portugues.txt";
         String path2 = "O Infante.txt";
 
-        Post post1 = postPoemOfFPBuilder(path1);
-        Post post2 = postPoemOfFPBuilder(path2);
+        //Post post1 = postPoemOfFPBuilder(path1);
+        //Post post2 = postPoemOfFPBuilder(path2);
 
-        post1.setAuthor(user1);
-        post2.setAuthor(user2);
+        //post1.setAuthor(user1);
+        //post2.setAuthor(user2);
 
         postBuilder(100, Arrays.asList(user1,user2));
 
-        Comment comment1 = new Comment(null, "Gosto deste poema", user1, post1);
-        Comment comment2 = new Comment(null, "Adoro deste poema", user2, post1);
-        Comment comment3 = new Comment(null, "Adoro FP", user2, post2);
-        Comment comment4 = new Comment(null, "Viva ao quinto imperio", user1, post2);
+        //Comment comment1 = new Comment(null, "Gosto deste poema", user1, post1);
+        //Comment comment2 = new Comment(null, "Adoro deste poema", user2, post1);
+        //Comment comment3 = new Comment(null, "Adoro FP", user2, post2);
+        //Comment comment4 = new Comment(null, "Viva ao quinto imperio", user1, post2);
 
         //commentRepository.saveAll(Arrays.asList(comment1, comment2, comment3, comment4));
         
@@ -73,11 +78,15 @@ public class TestConfig implements CommandLineRunner{
 
     public void postBuilder(int numberOfPost, List<User> useres) {        
         String title = "title Post_";
-        String body = "body Post_";        
+        String body = "body Post_";
+        
+        List<Category> categories = categoryBuilder(10);
+        categoryRepository.saveAll(categories);        
 
         for (int i = 0; i < numberOfPost; i++) {
             int userIndex = i % useres.size();
-            Post post = new Post(null, title + i, body + i, "", useres.get(userIndex));           
+            Post post = new Post(null, title + i, body + i, null /*categories.get(numberOfPost % 10)*/, useres.get(userIndex)); 
+            post.setCategory(categoryRepository.findById(1L).get());                  
             postRepository.save(post);
             List<Comment> postComments = commentBuilder(10, useres, post);
             commentRepository.saveAll(postComments);
@@ -86,28 +95,31 @@ public class TestConfig implements CommandLineRunner{
         
     }
 
-    public Post postPoemOfFPBuilder(String path) throws IOException {
-        BufferedReader buffRead = new BufferedReader(new FileReader(path));
-        StringBuilder text = new StringBuilder();
-        String title = "";
-        String linha = "";
+    /*
+        public Post postPoemOfFPBuilder(String path) throws IOException {
+            BufferedReader buffRead = new BufferedReader(new FileReader(path));
+            StringBuilder text = new StringBuilder();
+            String title = "";
+            String linha = "";
 
-        title = buffRead.readLine();
+            title = buffRead.readLine();
 
-        while (true) {
-            if (linha != null) {
-               text.append(linha + "\n");
+            while (true) {
+                if (linha != null) {
+                text.append(linha + "\n");
 
-            } else
-                break;
-            linha = buffRead.readLine();
+                } else
+                    break;
+                linha = buffRead.readLine();
+            }
+            buffRead.close();
+
+            Post post = new Post(null, title, text.toString(),"Poesia");
+
+            return post;
         }
-        buffRead.close();
-
-        Post post = new Post(null, title, text.toString(),"Poesia");
-
-        return post;
-    }
+     * 
+     */
 
     public List<Comment> commentBuilder(int numberOfComments, List<User> useres, Post post) {  
         List<Comment> list = new ArrayList<>();      
@@ -122,4 +134,14 @@ public class TestConfig implements CommandLineRunner{
         return list;
     }
 
+    public List<Category> categoryBuilder(int numberOfCategory) {
+        List<Category> list = new ArrayList<>();      
+        String category = "category_";
+
+        for (int i = numberOfCategory; i > 0; i--) {               
+            list.add(new Category(null, category + i));        
+        }
+
+        return list;
+    }
 }
