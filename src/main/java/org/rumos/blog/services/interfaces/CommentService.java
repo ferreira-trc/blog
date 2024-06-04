@@ -11,6 +11,7 @@ public interface CommentService {
     public List<CommentDTOToShow> findAll();
     public CommentDTOToShow findById(Long id);
     public List<CommentDTOToShow> findAllOfThePostId(Long postId);
+    public List<CommentDTOToShow> findAllOfThePostIdByCronOrder(Long postId);
     public CommentDTOToShow add(Long postId, CommentDTOToAdd comment);
     public CommentDTOToShow update(Long id, CommentDTOToUpdate commentUpdated);
     public CommentDTOToShow delete(Long id);

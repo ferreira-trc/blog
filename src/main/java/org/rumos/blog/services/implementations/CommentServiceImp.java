@@ -35,6 +35,7 @@ public class CommentServiceImp implements CommentService{
     @Autowired
     private CommentMapDTO commentMapDTO;
 
+    @Override
     public List<CommentDTOToShow> findAll() {
         List<Comment> list = commentRepository.findAll();
         List<CommentDTOToShow> listOfDTOs = new ArrayList<>();
@@ -42,21 +43,35 @@ public class CommentServiceImp implements CommentService{
         for (Comment comment : list) {
             listOfDTOs.add(commentMapDTO.convertToDTO(comment));
         }
-
+        
         return listOfDTOs;
     }
-
+    
+    @Override
     public List<CommentDTOToShow> findAllOfThePostId(Long postId) {
         List<Comment> list = commentRepository.findByPostId(postId);
         List<CommentDTOToShow> listOfDTOs = new ArrayList<>();
-
+        
         for (Comment comment : list) {
             listOfDTOs.add(commentMapDTO.convertToDTO(comment));
         }
-
+        
         return listOfDTOs;
     }
-
+    
+    @Override
+    public List<CommentDTOToShow> findAllOfThePostIdByCronOrder(Long postId) {
+        List<Comment> list = commentRepository.findByPostIdOrderByCreatedAtDesc(postId);
+        List<CommentDTOToShow> listOfDTOs = new ArrayList<>();
+        
+        for (Comment comment : list) {
+            listOfDTOs.add(commentMapDTO.convertToDTO(comment));
+        }
+        
+        return listOfDTOs;
+    }
+   
+    @Override
     public CommentDTOToShow findById(Long id) {
         Optional<Comment> comment = commentRepository.findById(id);
 
@@ -68,6 +83,7 @@ public class CommentServiceImp implements CommentService{
         return commentDTOToShow;
     }   
     
+    @Override
     public CommentDTOToShow add(Long postId, CommentDTOToAdd comment) { 
         Optional<Post> commentedPost = postRepository.findById(postId);
 
@@ -84,7 +100,8 @@ public class CommentServiceImp implements CommentService{
 
         throw new EntityNotFoundException("Post not found");
     }
-
+    
+    @Override
     public CommentDTOToShow update(Long id, CommentDTOToUpdate commentUpdated) {
         Comment commentToUpdate = commentRepository.getReferenceById(id);
         Comment commentToSave = commentMapDTO.convertToClass(commentUpdated, commentToUpdate);
@@ -93,7 +110,8 @@ public class CommentServiceImp implements CommentService{
         
         return commnetDTO;
     }    
-
+    
+    @Override
     public CommentDTOToShow delete(Long id) {
         Optional<Comment> commentToDelete = commentRepository.findById(id);        
         commentRepository.deleteById(id);        
@@ -101,5 +119,5 @@ public class CommentServiceImp implements CommentService{
         CommentDTOToShow commentDeleted = commentMapDTO.convertToDTO(commentToDelete.get());
         return commentDeleted;
     }
-    
+
 }
