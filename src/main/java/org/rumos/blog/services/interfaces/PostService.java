@@ -7,6 +7,7 @@ import org.rumos.blog.model.dtos.entities.post.PostDTOToShow;
 import org.rumos.blog.model.dtos.entities.post.PostDTOToUpdate;
 
 public interface PostService {
+    
     public List<PostDTOToShow> findAll();
     public List<PostDTOToShow> findAllByCronOrder();
     public PostDTOToShow findById(Long id);

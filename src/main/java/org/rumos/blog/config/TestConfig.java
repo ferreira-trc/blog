@@ -113,9 +113,9 @@ public class TestConfig implements CommandLineRunner{
         List<Comment> list = new ArrayList<>();      
         String commentContent = "comment_";
 
-        for (int i = 0; i < numberOfComments; i++) {
+        for (int i = numberOfComments; i > 0; i--) {
             int userIndex = i % useres.size(); 
-            Comment comment = new Comment(null, commentContent, useres.get(userIndex), post);    
+            Comment comment = new Comment(null, commentContent + i, useres.get(userIndex), post);    
             list.add(comment);        
         }
 
