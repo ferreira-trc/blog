@@ -10,6 +10,7 @@ import org.rumos.blog.model.dtos.entities.post.PostDTOToUpdate;
 import org.rumos.blog.model.dtos.maps.interfaces.PostMapDTO;
 import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.model.entities.User;
+import org.rumos.blog.repositories.CategoryRepository;
 import org.rumos.blog.repositories.PostRepository;
 import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.PostService;
@@ -26,7 +27,11 @@ public class PostServiceImp implements PostService{
     private UserRepository userRepository;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private PostMapDTO postMapDTO;
+
    
         
     public List<PostDTOToShow> findAll() {
@@ -65,6 +70,7 @@ public class PostServiceImp implements PostService{
         User author = userRepository.findByUserName(postDTO.authorUserName());
         Post postToSave = postMapDTO.convertToClass(postDTO);
         postToSave.setAuthor(author);
+        postToSave.setCategory(categoryRepository.findByCategory(postDTO.category()));
 
         Post postoToReturn = postRepository.save(postToSave);        
 

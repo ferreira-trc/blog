@@ -4,6 +4,7 @@ import org.rumos.blog.model.dtos.entities.post.PostDTOToAdd;
 import org.rumos.blog.model.dtos.entities.post.PostDTOToShow;
 import org.rumos.blog.model.dtos.entities.post.PostDTOToUpdate;
 import org.rumos.blog.model.dtos.maps.interfaces.PostMapDTO;
+import org.rumos.blog.model.entities.Category;
 import org.rumos.blog.model.entities.Post;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +15,7 @@ public class PostMapDTOImp implements PostMapDTO {
     public Post convertToClass(PostDTOToAdd entityDTO) {
         Post entity = new Post();
         entity.setTitle(entityDTO.title());
-        entity.setText(entityDTO.text());
-        entity.setCategory(entityDTO.category());
+        entity.setText(entityDTO.text());       
 
         return entity;
     }
@@ -33,9 +33,9 @@ public class PostMapDTOImp implements PostMapDTO {
         Long id = entity.getId();
         String title = entity.getTitle();
         String text = entity.getText();
-        String category = entity.getCategory();
+        Category category = entity.getCategory();
         String authorUserName = entity.getAuthor().getUserName();
-        PostDTOToShow entityDTO = new PostDTOToShow(id, title, text, category, authorUserName);
+        PostDTOToShow entityDTO = new PostDTOToShow(id, title, text, category.getCategory(), authorUserName);
 
         return entityDTO;
     }   

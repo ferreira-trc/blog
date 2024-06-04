@@ -9,6 +9,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,8 +19,10 @@ public class Post extends BaseEntity implements Serializable, Comparable<Post>{
         
     private String title;
     @Column(length = 1000)
-    private String text;    
-    private String category;
+    private String text;  
+    
+
+    private Category category;
     
     @ManyToOne
     private User author;
@@ -30,14 +33,14 @@ public class Post extends BaseEntity implements Serializable, Comparable<Post>{
     public Post() {
     }
 
-    public Post(Long id, String title, String text, String category) {
+    public Post(Long id, String title, String text, Category category) {
         super(id);        
         this.title = title;
         this.text = text;        
         this.category = category;
     }
 
-    public Post(Long id, String title, String text, String category, User author) {
+    public Post(Long id, String title, String text, Category category, User author) {
         this(id, title, text, category);
         this.author = author;
     }
@@ -62,11 +65,11 @@ public class Post extends BaseEntity implements Serializable, Comparable<Post>{
         this.text = text;
     }    
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
