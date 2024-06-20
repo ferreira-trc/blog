@@ -1,10 +1,15 @@
 package org.rumos.blog.model.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.rumos.blog.model.enums.Role;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -17,7 +22,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity implements Serializable{
+public class User extends BaseEntity implements Serializable, UserDetails{
     private static final long serialVersionUID = 1L;    
     
     @Column(name = "email", nullable = false, unique = true)
@@ -39,7 +44,9 @@ public class User extends BaseEntity implements Serializable{
     private Set<Comment> comments = new HashSet<>();
 
     public User() {
-    }
+    }    
+
+    
 
     public User(Long id,String email ,String userName, String password, Role role, Person person) {
         super(id);  
@@ -109,5 +116,39 @@ public class User extends BaseEntity implements Serializable{
     
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.role == Role.ADMIN) {
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        } else {
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {        
+        return true;
     }
 }

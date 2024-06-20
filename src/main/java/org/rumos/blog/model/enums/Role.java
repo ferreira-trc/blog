@@ -1,6 +1,18 @@
 package org.rumos.blog.model.enums;
 
 public enum Role {
-    ADMIN,
-    USER
+    ADMIN("admin"),
+    USER("user");
+
+    private String role;
+
+    Role(String role) {
+        this.role = role;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    
 }
