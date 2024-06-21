@@ -63,7 +63,7 @@ public class UserServiceImp implements UserService{
     public UserDTOToShow register(UserDTOToRegister userDTO) { 
         User userToSave = userMapDTO.convertToClass(userDTO);
 
-        if (userRepository.findByUserName(userDTO.userName()) != null) {
+        if (userRepository.findByUserName(userDTO.userName()).isPresent()) {
             return null;
         }
         

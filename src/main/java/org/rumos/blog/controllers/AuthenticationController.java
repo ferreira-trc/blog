@@ -7,11 +7,9 @@ import jakarta.validation.Valid;
 
 import org.rumos.blog.model.dtos.entities.AuthenticatioDTO;
 import org.rumos.blog.model.dtos.entities.LoginResponseDTO;
-import org.rumos.blog.model.dtos.entities.RegisterDTO;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToRegister;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
 import org.rumos.blog.model.entities.User;
-import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.implementations.TokenService;
 import org.rumos.blog.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
