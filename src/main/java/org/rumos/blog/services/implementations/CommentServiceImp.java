@@ -10,11 +10,13 @@ import org.rumos.blog.model.dtos.entities.comment.CommentDTOToUpdate;
 import org.rumos.blog.model.dtos.maps.interfaces.CommentMapDTO;
 import org.rumos.blog.model.entities.Comment;
 import org.rumos.blog.model.entities.Post;
+import org.rumos.blog.model.entities.User;
 import org.rumos.blog.repositories.CommentRepository;
 import org.rumos.blog.repositories.PostRepository;
 import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 
@@ -85,13 +87,14 @@ public class CommentServiceImp implements CommentService{
     
     @Override
     public CommentDTOToShow add(Long postId, CommentDTOToAdd comment) { 
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Post> commentedPost = postRepository.findById(postId);
 
         if (commentedPost.isPresent()) {
             Comment commentToSave = commentMapDTO.convertToClass(comment);
 
             commentToSave.setPost(commentedPost.get());
-            commentToSave.setAuthor(userRepository.findByUserName(comment.authorUserName()).get());
+            commentToSave.setAuthor(user);
 
             Comment commentSaved = commentRepository.save(commentToSave);
 
