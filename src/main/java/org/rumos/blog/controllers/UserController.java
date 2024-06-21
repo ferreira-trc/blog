@@ -3,7 +3,7 @@ package org.rumos.blog.controllers;
 import java.net.URI;
 import java.util.List;
 
-import org.rumos.blog.model.dtos.entities.user.UserDTOToAdd;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToRegister;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdate;
 import org.rumos.blog.services.interfaces.UserService;
@@ -40,8 +40,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTOToShow> post(@RequestBody UserDTOToAdd userDTO) {
-        UserDTOToShow user = userService.add(userDTO);
+    public ResponseEntity<UserDTOToShow> post(@RequestBody UserDTOToRegister userDTO) {
+        UserDTOToShow user = userService.register(userDTO);
 
         URI uri = ServletUriComponentsBuilder
                     .fromCurrentRequest()

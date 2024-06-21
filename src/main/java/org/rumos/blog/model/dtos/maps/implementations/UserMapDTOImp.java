@@ -1,6 +1,6 @@
 package org.rumos.blog.model.dtos.maps.implementations;
 
-import org.rumos.blog.model.dtos.entities.user.UserDTOToAdd;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToRegister;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdate;
 import org.rumos.blog.model.dtos.maps.interfaces.UserMapDTO;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 public class UserMapDTOImp implements UserMapDTO{
 
     @Override
-    public User convertToClass(UserDTOToAdd entityDTO) {
-        User entity = new User();
         entity.setEmail(entityDTO.email());
+    public User convertToClass(UserDTOToRegister entityDTO) {
+        User entity = new User();        
         entity.setUserName(entityDTO.userName());
         entity.setPassword(entityDTO.password());
         entity.setRole(entityDTO.role());
