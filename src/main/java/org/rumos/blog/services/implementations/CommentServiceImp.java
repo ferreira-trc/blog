@@ -91,7 +91,7 @@ public class CommentServiceImp implements CommentService{
             Comment commentToSave = commentMapDTO.convertToClass(comment);
 
             commentToSave.setPost(commentedPost.get());
-            commentToSave.setAuthor(userRepository.findByUserName(comment.authorUserName()));
+            commentToSave.setAuthor(userRepository.findByUserName(comment.authorUserName()).get());
 
             Comment commentSaved = commentRepository.save(commentToSave);
 

@@ -67,7 +67,7 @@ public class PostServiceImp implements PostService{
     }
 
     public PostDTOToShow add(PostDTOToAdd postDTO) {
-        User author = userRepository.findByUserName(postDTO.authorUserName());
+        User author = userRepository.findByUserName(postDTO.authorUserName()).get();
         Post postToSave = postMapDTO.convertToClass(postDTO);
         postToSave.setAuthor(author);
         postToSave.setCategory(categoryRepository.findByCategory(postDTO.category()));

@@ -13,7 +13,7 @@ import org.rumos.blog.model.enums.Role;
 import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,8 +50,13 @@ public class UserServiceImp implements UserService{
 
     @Override
     public UserDTOToShow findByUserName(String userName) {
-        User user = userRepository.findByUserName(userName);
-        UserDTOToShow userDTO = userMapDTO.convertToDTO(user);
+        Optional<User> user = userRepository.findByUserName(userName);
+
+        if (user.isEmpty()) {
+            return null;
+        }
+        
+        UserDTOToShow userDTO = userMapDTO.convertToDTO(user.get());
         return userDTO;
     }
 
