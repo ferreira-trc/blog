@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.rumos.blog.model.dtos.entities.user.UserDTOToAdd;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToRegister;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdate;
 import org.rumos.blog.model.dtos.maps.interfaces.UserMapDTO;
 import org.rumos.blog.model.entities.User;
+import org.rumos.blog.model.enums.Role;
 import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,8 +48,17 @@ public class UserServiceImp implements UserService{
         return userDTO;
     }
 
-    public UserDTOToShow add(UserDTOToAdd userDTO) { 
+    public UserDTOToShow register(UserDTOToRegister userDTO) { 
         User userToSave = userMapDTO.convertToClass(userDTO);
+
+        if (userRepository.findByUserName(userDTO.userName()) != null) {
+            return null;
+        }
+        
+        String encryptedPassword = new BCryptPasswordEncoder().encode(userDTO.password());
+        userToSave.setPassword(encryptedPassword);
+        userToSave.setRole(Role.USER);
+
         User userToReturn = userRepository.save(userToSave);
                 
         return userMapDTO.convertToDTO(userToReturn);
@@ -67,5 +79,6 @@ public class UserServiceImp implements UserService{
         UserDTOToShow userDeleted = userMapDTO.convertToDTO(userToDelete.get());
         return userDeleted;        
     }
+   
 
 }
