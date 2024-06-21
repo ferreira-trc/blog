@@ -26,11 +26,14 @@ public class SecurityConfig {
         return httpSecurity.csrf(csrf -> csrf.disable())
                            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                            .authorizeHttpRequests(authorize -> authorize
-                                //.requestMatchers("/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/post").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/post/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/comment").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/comment/**").permitAll()                           
+                           
                                 .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/post").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/post").authenticated()                     
                                 .anyRequest()
                                 .authenticated()
                             )
