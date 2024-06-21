@@ -37,20 +37,7 @@ public class UserController {
     public ResponseEntity<UserDTOToShow> getMethodName(@PathVariable Long id) {
         UserDTOToShow user = userService.findById(id);
         return ResponseEntity.ok().body(user);
-    }
-
-    @PostMapping
-    public ResponseEntity<UserDTOToShow> post(@RequestBody UserDTOToRegister userDTO) {
-        UserDTOToShow user = userService.register(userDTO);
-
-        URI uri = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(user.id())
-                    .toUri();
-
-        return ResponseEntity.created(uri).body(user);
-    }
+    }    
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<UserDTOToShow> put(@PathVariable Long id, @RequestBody UserDTOToUpdate userUpdated) {
