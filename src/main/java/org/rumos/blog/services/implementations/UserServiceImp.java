@@ -48,6 +48,13 @@ public class UserServiceImp implements UserService{
         return userDTO;
     }
 
+    @Override
+    public UserDTOToShow findByUserName(String userName) {
+        User user = userRepository.findByUserName(userName);
+        UserDTOToShow userDTO = userMapDTO.convertToDTO(user);
+        return userDTO;
+    }
+
     public UserDTOToShow register(UserDTOToRegister userDTO) { 
         User userToSave = userMapDTO.convertToClass(userDTO);
 
