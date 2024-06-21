@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.rumos.blog.model.Exceptions.AccessDeniedException;
+import org.rumos.blog.model.Exceptions.ResourceNotFoundException;
 import org.rumos.blog.model.dtos.entities.comment.CommentDTOToAdd;
 import org.rumos.blog.model.dtos.entities.comment.CommentDTOToShow;
 import org.rumos.blog.model.dtos.entities.comment.CommentDTOToUpdate;
@@ -106,12 +108,25 @@ public class CommentServiceImp implements CommentService{
     
     @Override
     public CommentDTOToShow update(Long id, CommentDTOToUpdate commentUpdated) {
-        Comment commentToUpdate = commentRepository.getReferenceById(id);
-        Comment commentToSave = commentMapDTO.convertToClass(commentUpdated, commentToUpdate);
-        Comment commentToReturn = commentRepository.save(commentToSave);
-        CommentDTOToShow commnetDTO = commentMapDTO.convertToDTO(commentToReturn);
-        
-        return commnetDTO;
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<Comment> commentOpt = commentRepository.findById(id);        
+
+        if (commentOpt.isPresent()) {
+            Comment commentToUpdate = commentOpt.get();            
+            
+            if (!commentToUpdate.getAuthor().getUserName().equals(user.getUserName())) {
+                throw new AccessDeniedException("User not authorized to update this comment");
+            }    
+            
+            commentToUpdate.setText(commentUpdated.commentContent());
+            Comment commentToReturn = commentRepository.save(commentToUpdate);            
+           
+            CommentDTOToShow commentDTO = commentMapDTO.convertToDTO(commentToReturn);
+            
+            return commentDTO;
+        } else {
+            throw new ResourceNotFoundException("Comment not found");
+        }
     }    
     
     @Override
