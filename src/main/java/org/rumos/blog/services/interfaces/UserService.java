@@ -9,6 +9,7 @@ import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdate;
 public interface UserService {
     public List<UserDTOToShow> findAll();
     public UserDTOToShow findById(Long id);
+    public UserDTOToShow findByUserName(String userName);
     public UserDTOToShow register(UserDTOToRegister userDTO);
     public UserDTOToShow update(Long postId, UserDTOToUpdate userUpdated);
     public UserDTOToShow delete(Long id);
