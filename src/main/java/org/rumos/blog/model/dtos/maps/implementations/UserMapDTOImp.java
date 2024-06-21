@@ -12,19 +12,16 @@ import org.springframework.stereotype.Component;
 public class UserMapDTOImp implements UserMapDTO{
 
     @Override
-        entity.setEmail(entityDTO.email());
     public User convertToClass(UserDTOToRegister entityDTO) {
         User entity = new User();        
         entity.setUserName(entityDTO.userName());
-        entity.setPassword(entityDTO.password());
-        entity.setRole(entityDTO.role());
+        entity.setPassword(entityDTO.password());       
 
         return entity;
     }
 
     @Override
-    public User convertToClass(UserDTOToUpdate entityDTO, User entity) {
-        entity.setEmail(entityDTO.email());
+    public User convertToClass(UserDTOToUpdate entityDTO, User entity) {        
         entity.setUserName(entityDTO.userName());
         entity.setPassword(entityDTO.password());
         entity.setRole(entityDTO.role());
@@ -34,11 +31,10 @@ public class UserMapDTOImp implements UserMapDTO{
 
     @Override
     public UserDTOToShow convertToDTO(User entity) {
-        Long id = entity.getId();
-        String email = entity.getEmail();
+        Long id = entity.getId();        
         String userName = entity.getUserName();
         Role role = entity.getRole();
-        UserDTOToShow entityDTO = new UserDTOToShow(id, email, userName, role);
+        UserDTOToShow entityDTO = new UserDTOToShow(id, userName, role);
 
         return entityDTO;
     }

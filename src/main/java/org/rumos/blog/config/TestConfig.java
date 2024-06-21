@@ -46,13 +46,13 @@ public class TestConfig implements CommandLineRunner{
     @Override
     public void run(String... args) throws Exception {
 
-        Person person1 = new Person(null, "Tiago Ferreira", LocalDate.now());
-        Person person2 = new Person(null, "Rute Andrade", LocalDate.now());
+        Person person1 = new Person(null, "Tiago Ferreira", "tiago@ex.pt", LocalDate.now());
+        Person person2 = new Person(null, "Rute Andrade","rute@ex.pt", LocalDate.now());
 
         personRepository.saveAll(Arrays.asList(person1,person2));
 
-        User user1 = new User(null, "tiago@ex.com","@ferreira_trc", "1234", Role.ADMIN, person1);
-        User user2 = new User(null,"rute@ex.com","@andrade_rm", "1234", Role.ADMIN, person2);
+        User user1 = new User(null,"@ferreira_trc", "1234", Role.ADMIN, person1);
+        User user2 = new User(null,"@andrade_rm", "1234", Role.ADMIN, person2);
 
         userRepository.saveAll(Arrays.asList(user1,user2));
 
