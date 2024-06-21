@@ -21,9 +21,10 @@ public class Person extends BaseEntity implements Serializable{
     public Person() {
     }
 
-    public Person(Long id, String name, LocalDate birthDay) {
+    public Person(Long id, String name, String email, LocalDate birthDay) {
         super(id);
         this.name = name;
+        this.email = email;
         this.birthDay = birthDay;
     }
 
