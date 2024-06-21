@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.rumos.blog.model.dtos.entities.AuthenticatioDTO;
 import org.rumos.blog.model.dtos.entities.LoginResponseDTO;
 import org.rumos.blog.model.dtos.entities.RegisterDTO;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToRegister;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
 import org.rumos.blog.model.entities.User;
 import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.implementations.TokenService;
@@ -30,7 +32,7 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private TokenService tokenService;
@@ -46,17 +48,9 @@ public class AuthenticationController {
     }
     
     @PostMapping(value = "/register")
-    public ResponseEntity register(@Valid @RequestBody RegisterDTO entity) {
-        if (userRepository.findByEmail(entity.login()) != null) {
-            return ResponseEntity.badRequest().build();
-        }
-        
-        String encryptedPassword = new BCryptPasswordEncoder().encode(entity.password());
-        User user = new User(null, entity.login(), entity.login(), encryptedPassword, entity.role(), null);
-
-        this.userRepository.save(user);
-        
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UserDTOToShow> register(@Valid @RequestBody UserDTOToRegister entity) {
+        UserDTOToShow userRegisted = userService.register(entity);        
+        return ResponseEntity.ok().body(userRegisted);
     }
     
 }
