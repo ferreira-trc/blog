@@ -25,8 +25,7 @@ import jakarta.persistence.Table;
 public class User extends BaseEntity implements Serializable, UserDetails{
     private static final long serialVersionUID = 1L;    
     
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    
     @Column(name = "username", nullable = false, unique = true)    
     private String userName;
     private String password;
@@ -44,13 +43,10 @@ public class User extends BaseEntity implements Serializable, UserDetails{
     private Set<Comment> comments = new HashSet<>();
 
     public User() {
-    }    
+    }      
 
-    
-
-    public User(Long id,String email ,String userName, String password, Role role, Person person) {
-        super(id);  
-        this.email = email;
+    public User(Long id, String userName, String password, Role role, Person person) {
+        super(id);         
         this.userName = userName;
         this.password = password;
         this.role = role;
@@ -59,16 +55,7 @@ public class User extends BaseEntity implements Serializable, UserDetails{
 
     public static long getSerialversionuid() {
         return serialVersionUID;
-    }     
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    } 
     
     public String getUserName() {
         return userName;
@@ -129,7 +116,7 @@ public class User extends BaseEntity implements Serializable, UserDetails{
 
     @Override
     public String getUsername() {
-        return email;
+        return getUserName();
     }
 
     @Override
