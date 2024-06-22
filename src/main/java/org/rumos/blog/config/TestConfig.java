@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @Profile("test")
@@ -51,8 +52,8 @@ public class TestConfig implements CommandLineRunner{
 
         personRepository.saveAll(Arrays.asList(person1,person2));
 
-        User user1 = new User(null,"@ferreira_trc", "1234", Role.ADMIN, person1);
-        User user2 = new User(null,"@andrade_rm", "1234", Role.ADMIN, person2);
+        User user1 = new User(null,"@ferreira_trc", new BCryptPasswordEncoder().encode("1234"), Role.ADMIN, person1);
+        User user2 = new User(null,"@andrade_rm", new BCryptPasswordEncoder().encode("1234"), Role.ADMIN, person2);
 
         userRepository.saveAll(Arrays.asList(user1,user2));
 
