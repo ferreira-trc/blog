@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.rumos.blog.model.Exceptions.AccessDeniedException;
+import org.rumos.blog.model.Exceptions.ResourceNotFoundException;
 import org.rumos.blog.model.dtos.entities.post.PostDTOToAdd;
 import org.rumos.blog.model.dtos.entities.post.PostDTOToShow;
 import org.rumos.blog.model.dtos.entities.post.PostDTOToUpdate;
@@ -15,6 +17,7 @@ import org.rumos.blog.repositories.PostRepository;
 import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -67,7 +70,8 @@ public class PostServiceImp implements PostService{
     }
 
     public PostDTOToShow add(PostDTOToAdd postDTO) {
-        User author = userRepository.findByUserName(postDTO.authorUserName()).get();
+        User author = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         Post postToSave = postMapDTO.convertToClass(postDTO);
         postToSave.setAuthor(author);
         postToSave.setCategory(categoryRepository.findByCategory(postDTO.category()));
