@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdate;
+import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdateRole;
+import org.rumos.blog.model.enums.Role;
 import org.rumos.blog.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,6 +42,13 @@ public class UserController {
     public ResponseEntity<UserDTOToShow> put(@PathVariable Long id, @RequestBody UserDTOToUpdate userUpdated) {
         UserDTOToShow user = userService.update(id, userUpdated);        
         return ResponseEntity.ok().body(user);
+    }
+
+    @PutMapping("/{userId}/role")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDTOToShow> updateUserRole(@PathVariable Long userId, @RequestBody UserDTOToUpdateRole role) {
+        UserDTOToShow updatedUser = userService.updateUserRole(userId, role.role());
+        return ResponseEntity.ok(updatedUser);
     }
     
     @DeleteMapping(value = "/{id}")
