@@ -81,14 +81,22 @@ public class PostServiceImp implements PostService{
         return postMapDTO.convertToDTO(postoToReturn);
     }
     
+    @Override
     public PostDTOToShow update(Long postId, PostDTOToUpdate postUpdated) {
-        Post postToUpdate = postRepository.getReferenceById(postId);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Post postToUpdate = postRepository.findById(postId)
+                                        .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
+      
+        if (!postToUpdate.getAuthor().getUserName().equals(user.getUserName())) {
+            throw new AccessDeniedException("User not authorized to edit this post");
+        }
+
         Post postToSave = postMapDTO.convertToClass(postUpdated, postToUpdate);
         Post postToReturn = postRepository.save(postToSave);
-        PostDTOToShow postDTO = postMapDTO.convertToDTO(postToReturn);
-        return postDTO;
-    }    
-
+        return postMapDTO.convertToDTO(postToReturn);
+    }
+   
+   
     public PostDTOToShow delete(Long id) { 
         Optional<Post> postToDelete = postRepository.findById(id);
         postRepository.deleteById(id);
