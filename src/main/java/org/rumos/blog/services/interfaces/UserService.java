@@ -12,5 +12,6 @@ public interface UserService {
     public UserDTOToShow findByUserName(String userName);
     public UserDTOToShow register(UserDTOToRegister userDTO);
     public UserDTOToShow update(Long postId, UserDTOToUpdate userUpdated);
+    public UserDTOToShow updateUserRole(Long userId, String role);
     public UserDTOToShow delete(Long id);
 }

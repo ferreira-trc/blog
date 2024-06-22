@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.rumos.blog.model.Exceptions.ResourceNotFoundException;
+import org.rumos.blog.model.Exceptions.RoleNotFoundException;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToRegister;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdate;
@@ -82,7 +84,29 @@ public class UserServiceImp implements UserService{
         User userToReturn = userRepository.save(userToSave);
         UserDTOToShow userDTO = userMapDTO.convertToDTO(userToReturn);
         return userDTO;
-    }   
+    }  
+    
+    public UserDTOToShow updateUserRole(Long userId, String newRole) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));         
+
+        switch (newRole.toLowerCase()) {
+            case "admin":
+                user.setRole(Role.ADMIN);
+                break;
+
+            case "user":
+                user.setRole(Role.USER);
+                break;
+        
+            default:
+                throw new RoleNotFoundException("Role not found");                
+        }        
+        
+        User updatedUser = userRepository.save(user);
+        UserDTOToShow userDTO = userMapDTO.convertToDTO(updatedUser);
+        return userDTO; 
+    }
 
     public UserDTOToShow delete(Long id) {
         Optional<User> userToDelete = userRepository.findById(id);        
