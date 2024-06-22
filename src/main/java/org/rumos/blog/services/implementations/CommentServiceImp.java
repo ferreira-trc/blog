@@ -16,7 +16,6 @@ import org.rumos.blog.model.entities.User;
 import org.rumos.blog.model.enums.Role;
 import org.rumos.blog.repositories.CommentRepository;
 import org.rumos.blog.repositories.PostRepository;
-import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,10 +31,7 @@ public class CommentServiceImp implements CommentService{
     private CommentRepository commentRepository;
 
     @Autowired
-    private PostRepository postRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private PostRepository postRepository;   
 
     @Autowired
     private CommentMapDTO commentMapDTO;
