@@ -28,8 +28,7 @@ public class PostController {
 
     @Autowired
     private PostService postService;    
-
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    
     @GetMapping    
     public ResponseEntity<List<PostDTOToShow>> getAll(@RequestParam(required = false) String order) {
         List<PostDTOToShow> list;
