@@ -35,6 +35,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
 
                                 .requestMatchers(HttpMethod.POST, "/comment/**").hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.PUT, "/comment/**").hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.DELETE, "/comment/**").hasAnyRole("ADMIN", "USER")
                                 
                                 .requestMatchers(HttpMethod.POST, "/post").hasRole("ADMIN")
                                 .anyRequest()
