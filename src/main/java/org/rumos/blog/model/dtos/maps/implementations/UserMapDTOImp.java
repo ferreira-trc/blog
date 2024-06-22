@@ -23,8 +23,7 @@ public class UserMapDTOImp implements UserMapDTO{
     @Override
     public User convertToClass(UserDTOToUpdate entityDTO, User entity) {        
         entity.setUserName(entityDTO.userName());
-        entity.setPassword(entityDTO.password());
-        entity.setRole(entityDTO.role());
+        entity.setPassword(entityDTO.password());        
 
         return entity;
     }

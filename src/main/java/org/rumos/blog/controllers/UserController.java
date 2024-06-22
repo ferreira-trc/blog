@@ -5,7 +5,6 @@ import java.util.List;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdate;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdateRole;
-import org.rumos.blog.model.enums.Role;
 import org.rumos.blog.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +37,9 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }    
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<UserDTOToShow> put(@PathVariable Long id, @RequestBody UserDTOToUpdate userUpdated) {
-        UserDTOToShow user = userService.update(id, userUpdated);        
+    @PutMapping
+    public ResponseEntity<UserDTOToShow> put(@RequestBody UserDTOToUpdate userUpdated) {
+        UserDTOToShow user = userService.update(userUpdated);        
         return ResponseEntity.ok().body(user);
     }
 

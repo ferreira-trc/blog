@@ -15,7 +15,7 @@ import org.rumos.blog.model.enums.Role;
 import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -78,8 +78,8 @@ public class UserServiceImp implements UserService{
         return userMapDTO.convertToDTO(userToReturn);
     }
 
-    public UserDTOToShow update(Long userId, UserDTOToUpdate userUpdated) {
-        User userToUpdate = userRepository.getReferenceById(userId);
+    public UserDTOToShow update(UserDTOToUpdate userUpdated) {
+        User userToUpdate = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User userToSave = userMapDTO.convertToClass(userUpdated, userToUpdate);
         User userToReturn = userRepository.save(userToSave);
         UserDTOToShow userDTO = userMapDTO.convertToDTO(userToReturn);
