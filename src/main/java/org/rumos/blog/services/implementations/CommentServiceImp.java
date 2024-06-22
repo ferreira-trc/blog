@@ -13,6 +13,7 @@ import org.rumos.blog.model.dtos.maps.interfaces.CommentMapDTO;
 import org.rumos.blog.model.entities.Comment;
 import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.model.entities.User;
+import org.rumos.blog.model.enums.Role;
 import org.rumos.blog.repositories.CommentRepository;
 import org.rumos.blog.repositories.PostRepository;
 import org.rumos.blog.repositories.UserRepository;
@@ -131,11 +132,24 @@ public class CommentServiceImp implements CommentService{
     
     @Override
     public CommentDTOToShow delete(Long id) {
-        Optional<Comment> commentToDelete = commentRepository.findById(id);        
-        commentRepository.deleteById(id);        
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    Optional<Comment> commentOpt = commentRepository.findById(id);
 
-        CommentDTOToShow commentDeleted = commentMapDTO.convertToDTO(commentToDelete.get());
-        return commentDeleted;
+        if (commentOpt.isPresent()) {
+            Comment commentToDelete = commentOpt.get();
+            
+            if (!commentToDelete.getAuthor().getUserName().equals(user.getUserName()) && !user.getRole().equals(Role.ADMIN)) {
+                throw new AccessDeniedException("User not authorized to delete this comment");
+            }
+
+            commentRepository.deleteById(id);
+
+            CommentDTOToShow commentDeleted = commentMapDTO.convertToDTO(commentToDelete);
+            return commentDeleted;
+        } else {
+            throw new ResourceNotFoundException("Comment not found");
+        }
     }
+
 
 }
