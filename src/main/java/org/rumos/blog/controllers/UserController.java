@@ -26,6 +26,7 @@ public class UserController {
     private UserService userService;    
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDTOToShow>> findAll() {
         List<UserDTOToShow> list = userService.findAll();
         return ResponseEntity.ok().body(list);
@@ -51,7 +52,7 @@ public class UserController {
     }
     
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<UserDTOToShow> post(@PathVariable Long id) {
+    public ResponseEntity<UserDTOToShow> delete(@PathVariable Long id) {
         UserDTOToShow userToDelete = userService.delete(id);
         return ResponseEntity.ok().body(userToDelete);
     }
