@@ -14,7 +14,6 @@ import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.model.entities.User;
 import org.rumos.blog.repositories.CategoryRepository;
 import org.rumos.blog.repositories.PostRepository;
-import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,10 +23,7 @@ import org.springframework.stereotype.Service;
 public class PostServiceImp implements PostService{
 
     @Autowired
-    private PostRepository postRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private PostRepository postRepository;   
 
     @Autowired
     private CategoryRepository categoryRepository;
