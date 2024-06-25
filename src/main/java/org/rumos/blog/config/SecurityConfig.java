@@ -37,10 +37,16 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/comment/**").hasAnyRole("ADMIN", "USER")
                                 .requestMatchers(HttpMethod.PUT, "/comment/**").hasAnyRole("ADMIN", "USER")
                                 .requestMatchers(HttpMethod.DELETE, "/comment/**").hasAnyRole("ADMIN", "USER")
+
+                                .requestMatchers(HttpMethod.PUT, "/person/**").hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.PUT, "/user/**").hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.GET, "/user/**").hasAnyRole("ADMIN", "USER")
                                 
                                 .requestMatchers(HttpMethod.POST, "/post").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/post/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/post/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/user").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/person").hasRole("ADMIN")
 
                                 .anyRequest()
                                 .authenticated()
