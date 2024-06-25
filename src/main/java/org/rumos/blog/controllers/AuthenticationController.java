@@ -7,11 +7,11 @@ import jakarta.validation.Valid;
 
 import org.rumos.blog.model.dtos.entities.AuthenticatioDTO;
 import org.rumos.blog.model.dtos.entities.LoginResponseDTO;
-import org.rumos.blog.model.dtos.entities.user.UserDTOToRegister;
-import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
+import org.rumos.blog.model.dtos.entities.RegisterDTO;
+import org.rumos.blog.model.dtos.entities.UserPersonDTO;
 import org.rumos.blog.model.entities.User;
 import org.rumos.blog.services.implementations.TokenService;
-import org.rumos.blog.services.interfaces.UserService;
+import org.rumos.blog.services.interfaces.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,7 +29,7 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserService userService;
+    private RegisterService registerService;
 
     @Autowired
     private TokenService tokenService;
@@ -45,8 +45,8 @@ public class AuthenticationController {
     }
     
     @PostMapping(value = "/register")
-    public ResponseEntity<UserDTOToShow> register(@Valid @RequestBody UserDTOToRegister entity) {
-        UserDTOToShow userRegisted = userService.register(entity);        
+    public ResponseEntity<UserPersonDTO> register(@Valid @RequestBody RegisterDTO entity) {
+        UserPersonDTO userRegisted = registerService.register(entity.userDTO(), entity.personDTO());        
         return ResponseEntity.ok().body(userRegisted);
     }
     
