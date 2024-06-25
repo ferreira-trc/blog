@@ -32,7 +32,7 @@ public class PersonController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Person> getMethodName(@PathVariable Long id) {
+    public ResponseEntity<Person> getById(@PathVariable Long id) {
         Person person = personService.findById(id);
         return ResponseEntity.ok().body(person);
     }
