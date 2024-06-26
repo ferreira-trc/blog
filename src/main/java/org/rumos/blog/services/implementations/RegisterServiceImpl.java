@@ -38,6 +38,8 @@ public class RegisterServiceImpl implements RegisterService{
     public UserPersonDTO register(UserDTOToRegister userDTO, PersonDTOToRegister personDTO) { 
         User userToSave = userMapDTO.convertToClass(userDTO);
         Person personToSave = personMapDTO.convertToClass(personDTO);
+
+        userToSave.setPerson(personToSave);
         
 
         if (personRepository.findByEmail(personDTO.email()).isPresent()) {
