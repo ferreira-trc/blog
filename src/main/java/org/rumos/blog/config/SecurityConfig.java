@@ -24,8 +24,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(csrf -> csrf.disable())
-                           .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                           .authorizeHttpRequests(authorize -> authorize
+                            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
+                            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                            .authorizeHttpRequests(authorize -> authorize
+                                .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/post").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/post/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/comment").permitAll()
