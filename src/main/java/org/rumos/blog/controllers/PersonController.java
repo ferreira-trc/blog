@@ -43,12 +43,6 @@ public class PersonController {
         return ResponseEntity.ok().body(person);
     }
     
-    @PostMapping
-    public ResponseEntity<Person> post(@RequestBody Person person) {
-        person = personService.add(person);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(person.getId()).toUri();        
-        return ResponseEntity.created(uri).body(person);
     }
     
     
