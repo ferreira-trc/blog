@@ -32,7 +32,7 @@ public class PostServiceImp implements PostService{
     private PostMapDTO postMapDTO;
 
    
-        
+    @Override    
     public List<PostDTOToShow> findAll() {
         List<Post> list = postRepository.findAll();
         List<PostDTOToShow> listOfDTOs = new ArrayList<>();
@@ -44,6 +44,36 @@ public class PostServiceImp implements PostService{
         return listOfDTOs;
     }
 
+    @Override
+    public List<PostDTOToShow> findAllByCronOrder() {
+        List<Post> list = postRepository.findAllByOrderByCreatedAtDesc();  
+        List<PostDTOToShow> listOfDTOs = new ArrayList<>();
+        
+        for (Post post : list) {
+            listOfDTOs.add(postMapDTO.convertToDTO(post));
+        }
+        return listOfDTOs;
+    }
+    
+    @Override
+	public List<PostDTOToShow> findAllByAuthor(Long authorId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+        if (!user.getId().equals(authorId)) {
+            throw new AccessDeniedException("User do not match");
+        }
+        
+        List<Post> list = postRepository.findAllByAuthor(user);
+        List<PostDTOToShow> listOfDTOs = new ArrayList<>();
+        
+        for (Post post : list) {
+            listOfDTOs.add(postMapDTO.convertToDTO(post));
+        }
+        
+        return listOfDTOs;
+	}
+
+    @Override
     public PostDTOToShow findById(Long id) {
         Optional<Post> post = postRepository.findById(id);
 
@@ -55,16 +85,7 @@ public class PostServiceImp implements PostService{
         return postGetDTO;
     }
 
-    public List<PostDTOToShow> findAllByCronOrder() {
-        List<Post> list = postRepository.findAllByOrderByCreatedAtDesc();  
-        List<PostDTOToShow> listOfDTOs = new ArrayList<>();
-
-        for (Post post : list) {
-            listOfDTOs.add(postMapDTO.convertToDTO(post));
-        }
-        return listOfDTOs;
-    }
-
+    @Override
     public PostDTOToShow add(PostDTOToAdd postDTO) {
         User author = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -92,12 +113,12 @@ public class PostServiceImp implements PostService{
         return postMapDTO.convertToDTO(postToReturn);
     }
    
-   
+    @Override
     public PostDTOToShow delete(Long id) { 
         Optional<Post> postToDelete = postRepository.findById(id);
         postRepository.deleteById(id);
 
         PostDTOToShow postToReturn = postMapDTO.convertToDTO(postToDelete.get());
         return postToReturn;
-    }
+    }	
 }

@@ -10,6 +10,7 @@ public interface PostService {
     
     public List<PostDTOToShow> findAll();
     public List<PostDTOToShow> findAllByCronOrder();
+    public List<PostDTOToShow> findAllByAuthor(Long AuthorId);
     public PostDTOToShow findById(Long id);
     public PostDTOToShow add(PostDTOToAdd post);
     public PostDTOToShow update(Long postId, PostDTOToUpdate postUpdated);
