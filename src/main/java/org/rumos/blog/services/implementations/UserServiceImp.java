@@ -15,6 +15,7 @@ import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -63,6 +64,10 @@ public class UserServiceImp implements UserService{
     public UserDTOToShow update(UserDTOToUpdate userUpdated) {
         User userToUpdate = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User userToSave = userMapDTO.convertToClass(userUpdated, userToUpdate);
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(userToSave.getPassword());
+        userToSave.setPassword(encryptedPassword);
+        
         User userToReturn = userRepository.save(userToSave);
         UserDTOToShow userDTO = userMapDTO.convertToDTO(userToReturn);
         return userDTO;

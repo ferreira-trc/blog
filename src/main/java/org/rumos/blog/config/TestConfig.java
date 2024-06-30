@@ -57,6 +57,8 @@ public class TestConfig implements CommandLineRunner{
 
         userRepository.saveAll(Arrays.asList(user1,user2));
 
+        personUserBuilder(10);
+
         String path1 = "Mar Portugues.txt";
         String path2 = "O Infante.txt";
 
@@ -66,7 +68,7 @@ public class TestConfig implements CommandLineRunner{
         //post1.setAuthor(user1);
         //post2.setAuthor(user2);
 
-        postBuilder(100, Arrays.asList(user1,user2));
+        postBuilder(2, Arrays.asList(user1,user2));
 
         //Comment comment1 = new Comment(null, "Gosto deste poema", user1, post1);
         //Comment comment2 = new Comment(null, "Adoro deste poema", user2, post1);
@@ -75,6 +77,21 @@ public class TestConfig implements CommandLineRunner{
 
         //commentRepository.saveAll(Arrays.asList(comment1, comment2, comment3, comment4));
         
+    }
+
+    public void personUserBuilder(int numberOfUseres) {
+        String personName = "person_";
+        String userName = "user_";
+        String email = "@ex.pt";
+
+        for (int i = 0; i < numberOfUseres; i++) {
+            Person person = new Person(null, personName + i, personName + i + email, LocalDate.now());
+            User user = new User(null, userName + i, new BCryptPasswordEncoder().encode("1234") , Role.USER, person);
+
+            personRepository.save(person);
+            userRepository.save(user);
+        }
+
     }
 
     public void postBuilder(int numberOfPost, List<User> useres) {        
@@ -89,7 +106,7 @@ public class TestConfig implements CommandLineRunner{
             Post post = new Post(null, title + i, body + i, null /*categories.get(numberOfPost % 10)*/, useres.get(userIndex)); 
             post.setCategory(categoryRepository.findById(1L).get());                  
             postRepository.save(post);
-            List<Comment> postComments = commentBuilder(10, useres, post);
+            List<Comment> postComments = commentBuilder(2, useres, post);
             commentRepository.saveAll(postComments);
         }
 
