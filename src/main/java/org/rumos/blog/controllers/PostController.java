@@ -39,7 +39,14 @@ public class PostController {
         }
          
         return ResponseEntity.ok().body(list);
-    }   
+    }  
+
+    @GetMapping(value = "/author/{AuthorId}")    
+    public ResponseEntity<List<PostDTOToShow>> getAllByAuthor(@PathVariable Long AuthorId) {
+        List<PostDTOToShow> list = postService.findAllByAuthor(AuthorId);       
+         
+        return ResponseEntity.ok().body(list);
+    }    
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<PostDTOToShow> getById(@PathVariable Long id) {
