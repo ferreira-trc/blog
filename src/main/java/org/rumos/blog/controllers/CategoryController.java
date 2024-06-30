@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+/**
+ * Controller class for handling operations related to blog categories.
+ */
 @RestController
 @RequestMapping(value = "/category")
 public class CategoryController {
@@ -25,17 +28,28 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-
+    /**
+     * Endpoint to retrieve all categories.
+     *
+     * @return ResponseEntity containing a list of CategoryDTOToShow objects
+     */
     @GetMapping
     public ResponseEntity<List<CategoryDTOToShow>> getAll() {
-       List<CategoryDTOToShow> list = categoryService.findAll();
+        List<CategoryDTOToShow> list = categoryService.findAll();
         return ResponseEntity.ok().body(list);
     }
     
+    /**
+     * Endpoint to add a new category.
+     *
+     * @param categoryDTO CategoryDTOToAdd object containing details of the category to be added
+     * @return ResponseEntity containing the added CategoryDTOToShow object
+     */
     @PostMapping
     public ResponseEntity<CategoryDTOToShow> post(@RequestBody CategoryDTOToAdd categoryDTO) {   
-
         CategoryDTOToShow category = categoryService.add(categoryDTO);
+        
+        // Building URI for newly created resource
         URI uri = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
@@ -45,10 +59,16 @@ public class CategoryController {
         return ResponseEntity.created(uri).body(category);
     }
 
+    /**
+     * Endpoint to delete a category by its ID.
+     *
+     * @param id ID of the category to be deleted
+     * @return ResponseEntity containing the deleted CategoryDTOToShow object
+     */
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<CategoryDTOToShow> delete(@PathVariable Long id) {
         CategoryDTOToShow categoryDeleted = categoryService.delete(id);
         return ResponseEntity.ok().body(categoryDeleted);
     }
-    
 }
+

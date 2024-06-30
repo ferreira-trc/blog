@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.rumos.blog.model.dtos.entities.user.UserDTOToAdd;
+import org.rumos.blog.model.Exceptions.ResourceNotFoundException;
+import org.rumos.blog.model.Exceptions.RoleNotFoundException;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToShow;
 import org.rumos.blog.model.dtos.entities.user.UserDTOToUpdate;
 import org.rumos.blog.model.dtos.maps.interfaces.UserMapDTO;
 import org.rumos.blog.model.entities.User;
+import org.rumos.blog.model.enums.Role;
 import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,20 +49,51 @@ public class UserServiceImp implements UserService{
         return userDTO;
     }
 
-    public UserDTOToShow add(UserDTOToAdd userDTO) { 
-        User userToSave = userMapDTO.convertToClass(userDTO);
-        User userToReturn = userRepository.save(userToSave);
-                
-        return userMapDTO.convertToDTO(userToReturn);
-    }
+    @Override
+    public UserDTOToShow findByUserName(String userName) {
+        Optional<User> user = userRepository.findByUserName(userName);
 
-    public UserDTOToShow update(Long userId, UserDTOToUpdate userUpdated) {
-        User userToUpdate = userRepository.getReferenceById(userId);
+        if (user.isEmpty()) {
+            return null;
+        }
+        
+        UserDTOToShow userDTO = userMapDTO.convertToDTO(user.get());
+        return userDTO;
+    }    
+
+    public UserDTOToShow update(UserDTOToUpdate userUpdated) {
+        User userToUpdate = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User userToSave = userMapDTO.convertToClass(userUpdated, userToUpdate);
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(userToSave.getPassword());
+        userToSave.setPassword(encryptedPassword);
+        
         User userToReturn = userRepository.save(userToSave);
         UserDTOToShow userDTO = userMapDTO.convertToDTO(userToReturn);
         return userDTO;
-    }   
+    }  
+    
+    public UserDTOToShow updateUserRole(Long userId, String newRole) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));         
+
+        switch (newRole.toLowerCase()) {
+            case "admin":
+                user.setRole(Role.ADMIN);
+                break;
+
+            case "user":
+                user.setRole(Role.USER);
+                break;
+        
+            default:
+                throw new RoleNotFoundException("Role not found");                
+        }        
+        
+        User updatedUser = userRepository.save(user);
+        UserDTOToShow userDTO = userMapDTO.convertToDTO(updatedUser);
+        return userDTO; 
+    }
 
     public UserDTOToShow delete(Long id) {
         Optional<User> userToDelete = userRepository.findById(id);        
@@ -67,5 +102,6 @@ public class UserServiceImp implements UserService{
         UserDTOToShow userDeleted = userMapDTO.convertToDTO(userToDelete.get());
         return userDeleted;        
     }
+   
 
 }

@@ -4,17 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.rumos.blog.model.Exceptions.AccessDeniedException;
+import org.rumos.blog.model.Exceptions.ResourceNotFoundException;
 import org.rumos.blog.model.dtos.entities.comment.CommentDTOToAdd;
 import org.rumos.blog.model.dtos.entities.comment.CommentDTOToShow;
 import org.rumos.blog.model.dtos.entities.comment.CommentDTOToUpdate;
 import org.rumos.blog.model.dtos.maps.interfaces.CommentMapDTO;
 import org.rumos.blog.model.entities.Comment;
 import org.rumos.blog.model.entities.Post;
+import org.rumos.blog.model.entities.User;
+import org.rumos.blog.model.enums.Role;
 import org.rumos.blog.repositories.CommentRepository;
 import org.rumos.blog.repositories.PostRepository;
-import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 
@@ -27,10 +31,7 @@ public class CommentServiceImp implements CommentService{
     private CommentRepository commentRepository;
 
     @Autowired
-    private PostRepository postRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private PostRepository postRepository;   
 
     @Autowired
     private CommentMapDTO commentMapDTO;
@@ -85,13 +86,14 @@ public class CommentServiceImp implements CommentService{
     
     @Override
     public CommentDTOToShow add(Long postId, CommentDTOToAdd comment) { 
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Post> commentedPost = postRepository.findById(postId);
 
         if (commentedPost.isPresent()) {
             Comment commentToSave = commentMapDTO.convertToClass(comment);
 
             commentToSave.setPost(commentedPost.get());
-            commentToSave.setAuthor(userRepository.findByUserName(comment.authorUserName()));
+            commentToSave.setAuthor(user);
 
             Comment commentSaved = commentRepository.save(commentToSave);
 
@@ -103,21 +105,47 @@ public class CommentServiceImp implements CommentService{
     
     @Override
     public CommentDTOToShow update(Long id, CommentDTOToUpdate commentUpdated) {
-        Comment commentToUpdate = commentRepository.getReferenceById(id);
-        Comment commentToSave = commentMapDTO.convertToClass(commentUpdated, commentToUpdate);
-        Comment commentToReturn = commentRepository.save(commentToSave);
-        CommentDTOToShow commnetDTO = commentMapDTO.convertToDTO(commentToReturn);
-        
-        return commnetDTO;
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<Comment> commentOpt = commentRepository.findById(id);        
+
+        if (commentOpt.isPresent()) {
+            Comment commentToUpdate = commentOpt.get();            
+            
+            if (!commentToUpdate.getAuthor().getUserName().equals(user.getUserName())) {
+                throw new AccessDeniedException("User not authorized to update this comment");
+            }    
+            
+            commentToUpdate.setText(commentUpdated.commentContent());
+            Comment commentToReturn = commentRepository.save(commentToUpdate);            
+           
+            CommentDTOToShow commentDTO = commentMapDTO.convertToDTO(commentToReturn);
+            
+            return commentDTO;
+        } else {
+            throw new ResourceNotFoundException("Comment not found");
+        }
     }    
     
     @Override
     public CommentDTOToShow delete(Long id) {
-        Optional<Comment> commentToDelete = commentRepository.findById(id);        
-        commentRepository.deleteById(id);        
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    Optional<Comment> commentOpt = commentRepository.findById(id);
 
-        CommentDTOToShow commentDeleted = commentMapDTO.convertToDTO(commentToDelete.get());
-        return commentDeleted;
+        if (commentOpt.isPresent()) {
+            Comment commentToDelete = commentOpt.get();
+            
+            if (!commentToDelete.getAuthor().getUserName().equals(user.getUserName()) && !user.getRole().equals(Role.ADMIN)) {
+                throw new AccessDeniedException("User not authorized to delete this comment");
+            }
+
+            commentRepository.deleteById(id);
+
+            CommentDTOToShow commentDeleted = commentMapDTO.convertToDTO(commentToDelete);
+            return commentDeleted;
+        } else {
+            throw new ResourceNotFoundException("Comment not found");
+        }
     }
+
 
 }

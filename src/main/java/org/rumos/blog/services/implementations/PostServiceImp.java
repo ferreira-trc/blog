@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.rumos.blog.model.Exceptions.AccessDeniedException;
+import org.rumos.blog.model.Exceptions.ResourceNotFoundException;
 import org.rumos.blog.model.dtos.entities.post.PostDTOToAdd;
 import org.rumos.blog.model.dtos.entities.post.PostDTOToShow;
 import org.rumos.blog.model.dtos.entities.post.PostDTOToUpdate;
@@ -12,19 +14,16 @@ import org.rumos.blog.model.entities.Post;
 import org.rumos.blog.model.entities.User;
 import org.rumos.blog.repositories.CategoryRepository;
 import org.rumos.blog.repositories.PostRepository;
-import org.rumos.blog.repositories.UserRepository;
 import org.rumos.blog.services.interfaces.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PostServiceImp implements PostService{
 
     @Autowired
-    private PostRepository postRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private PostRepository postRepository;   
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -33,7 +32,7 @@ public class PostServiceImp implements PostService{
     private PostMapDTO postMapDTO;
 
    
-        
+    @Override    
     public List<PostDTOToShow> findAll() {
         List<Post> list = postRepository.findAll();
         List<PostDTOToShow> listOfDTOs = new ArrayList<>();
@@ -45,6 +44,36 @@ public class PostServiceImp implements PostService{
         return listOfDTOs;
     }
 
+    @Override
+    public List<PostDTOToShow> findAllByCronOrder() {
+        List<Post> list = postRepository.findAllByOrderByCreatedAtDesc();  
+        List<PostDTOToShow> listOfDTOs = new ArrayList<>();
+        
+        for (Post post : list) {
+            listOfDTOs.add(postMapDTO.convertToDTO(post));
+        }
+        return listOfDTOs;
+    }
+    
+    @Override
+	public List<PostDTOToShow> findAllByAuthor(Long authorId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+        if (!user.getId().equals(authorId)) {
+            throw new AccessDeniedException("User do not match");
+        }
+        
+        List<Post> list = postRepository.findAllByAuthor(user);
+        List<PostDTOToShow> listOfDTOs = new ArrayList<>();
+        
+        for (Post post : list) {
+            listOfDTOs.add(postMapDTO.convertToDTO(post));
+        }
+        
+        return listOfDTOs;
+	}
+
+    @Override
     public PostDTOToShow findById(Long id) {
         Optional<Post> post = postRepository.findById(id);
 
@@ -56,18 +85,10 @@ public class PostServiceImp implements PostService{
         return postGetDTO;
     }
 
-    public List<PostDTOToShow> findAllByCronOrder() {
-        List<Post> list = postRepository.findAllByOrderByCreatedAtDesc();  
-        List<PostDTOToShow> listOfDTOs = new ArrayList<>();
-
-        for (Post post : list) {
-            listOfDTOs.add(postMapDTO.convertToDTO(post));
-        }
-        return listOfDTOs;
-    }
-
+    @Override
     public PostDTOToShow add(PostDTOToAdd postDTO) {
-        User author = userRepository.findByUserName(postDTO.authorUserName());
+        User author = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         Post postToSave = postMapDTO.convertToClass(postDTO);
         postToSave.setAuthor(author);
         postToSave.setCategory(categoryRepository.findByCategory(postDTO.category()));
@@ -77,19 +98,27 @@ public class PostServiceImp implements PostService{
         return postMapDTO.convertToDTO(postoToReturn);
     }
     
+    @Override
     public PostDTOToShow update(Long postId, PostDTOToUpdate postUpdated) {
-        Post postToUpdate = postRepository.getReferenceById(postId);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Post postToUpdate = postRepository.findById(postId)
+                                        .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
+      
+        if (!postToUpdate.getAuthor().getUserName().equals(user.getUserName())) {
+            throw new AccessDeniedException("User not authorized to edit this post");
+        }
+
         Post postToSave = postMapDTO.convertToClass(postUpdated, postToUpdate);
         Post postToReturn = postRepository.save(postToSave);
-        PostDTOToShow postDTO = postMapDTO.convertToDTO(postToReturn);
-        return postDTO;
-    }    
-
+        return postMapDTO.convertToDTO(postToReturn);
+    }
+   
+    @Override
     public PostDTOToShow delete(Long id) { 
         Optional<Post> postToDelete = postRepository.findById(id);
         postRepository.deleteById(id);
 
         PostDTOToShow postToReturn = postMapDTO.convertToDTO(postToDelete.get());
         return postToReturn;
-    }
+    }	
 }
